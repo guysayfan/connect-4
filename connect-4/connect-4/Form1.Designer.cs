@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "connect4";
             this.Text = "Connect 4";
+            this.Load += new System.EventHandler(this.connect4_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.connect4_Paint);
             this.ResumeLayout(false);
 
