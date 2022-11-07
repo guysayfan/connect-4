@@ -34,10 +34,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(524, 461);
             this.Name = "connect4";
             this.Text = "Connect 4";
-            this.Load += new System.EventHandler(this.connect4_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.connect4_Paint);
             this.ResumeLayout(false);
 

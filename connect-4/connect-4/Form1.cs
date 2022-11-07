@@ -19,7 +19,10 @@ namespace connect_4
         public connect4()
         {
             InitializeComponent();
+            MaximizeBox = false;
+            MinimizeBox = false;
             ResizeRedraw = true;
+            FormBorderStyle = FormBorderStyle.Fixed3D;
 
         }
 
@@ -27,9 +30,10 @@ namespace connect_4
         {
             var g = e.Graphics;
             g.Clear(BackColor);
-            
+
             g.DrawRectangle(penRed, offset, offset, Width - (offset + penWidth + frameX) * 2, Height - (offset + penWidth + frameY) * 2);
             drawBoard(g);
+
         }
 
         private void drawCell(Graphics g, Pen p, int x, int y)
@@ -50,11 +54,6 @@ namespace connect_4
                 }
             }
             //g.FillPolygon(penDarkBlue, standPoints);
-        }
-
-        private void connect4_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
