@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\connect-4-core\connect-4-core.csproj" />
+    <ProjectReference Include="..\connect-4-core\Connect4Core.csproj" />
   </ItemGroup>
 
 </Project>
