@@ -20,6 +20,11 @@ namespace connect_4_core
         {
             return FindTopRow(col) == -1;
         }
+        
+        public int? GetPlayer(int col, int row)
+        {
+            return board[col, row];
+        }
 
         //public bool CheckVictory(int player, int lastPieceRow, int lastPieceCol)
         //{
@@ -29,7 +34,7 @@ namespace connect_4_core
         // Finds next available row to place piece
         private int FindTopRow(int col)
         {
-            for (int row = 6; row >= 0; row--)
+            for (int row = 5; row >= 0; row--)
             {
                 if (board[col, row] == null)
                 {

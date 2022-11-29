@@ -38,6 +38,7 @@
             this.Name = "connect4";
             this.Text = "Connect 4";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.connect4_Paint);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.connect4_MouseClick);
             this.ResumeLayout(false);
 
         }
