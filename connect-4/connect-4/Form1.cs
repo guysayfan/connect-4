@@ -8,9 +8,7 @@ namespace connect_4
         const int penWidth = 4;
         const int offset = 30;
         const int cellOffset = 8;
-        const int cellSize = 58;
-        const int frameX = 3;
-        const int frameY = 15;
+        const int cellSize = 80;
 
         Pen penRed = new Pen(Color.Red, penWidth);
         Pen penDarkBlue = new Pen(Color.DarkBlue, penWidth);
@@ -29,6 +27,9 @@ namespace connect_4
             ResizeRedraw = true;
             FormBorderStyle = FormBorderStyle.Fixed3D;
 
+            var width = 2 * (penWidth + 2 * offset) + 7 * cellSize;
+            var height = 2 * (penWidth + 2 * offset) + 6 * cellSize;
+            ClientSize = new Size(width, height);
         }
 
         private void connect4_Paint(object sender, PaintEventArgs e)
@@ -36,7 +37,7 @@ namespace connect_4
             var g = e.Graphics;
             g.Clear(BackColor);
 
-            g.DrawRectangle(penRed, offset, offset, Width - (offset + penWidth + frameX) * 2, Height - (offset + penWidth + frameY) * 2);
+            g.DrawRectangle(penRed, offset, offset, ClientSize.Width - (2 * offset + penWidth), ClientSize.Height - (2 * offset + penWidth));
             drawBoard(g);
 
         }
@@ -50,8 +51,6 @@ namespace connect_4
 
         private void drawBoard(Graphics g)
         {
-            var board = new Board();
-
             for (int col = 0; col < 7; col++)
             {
                 for (int row = 0; row < 6; row++)
@@ -84,7 +83,7 @@ namespace connect_4
 
         private int getClickedCol(MouseEventArgs e)
         {
-            var clickX = e.Location.X - (frameX + offset + penWidth);
+            var clickX = e.Location.X - (2 * offset + penWidth);
 
             for (int col = 0; col < 7; col++)
             {
