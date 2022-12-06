@@ -6,7 +6,7 @@ namespace connect_4_core
     {
         int?[,] board = new int?[7, 6];
 
-        public void DropPiece(int col, int player)
+        public int DropPiece(int col, int player)
         {
             var topRow = FindTopRow(col);
             if (topRow == -1)
@@ -14,6 +14,8 @@ namespace connect_4_core
                 throw new Exception("Col full");
             }
             board[col, topRow] = player;
+
+            return topRow;
         }
 
         public bool IsColFull(int col)

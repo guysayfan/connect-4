@@ -1,5 +1,6 @@
 using connect_4_core;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace connect_4
 {
@@ -76,8 +77,9 @@ namespace connect_4
 
             if (col != -1 && !board.IsColFull(col))
             {
-                board.DropPiece(col, 0);
-                Refresh();
+                var row = board.DropPiece(col, 0);
+                var cell = calcCellRect(row, col);
+                Invalidate(cell);
             }
         }
 
@@ -92,6 +94,13 @@ namespace connect_4
                 }
             }
             return -1;
+        }
+
+        private Rectangle calcCellRect(int row, int col)
+        {
+            var x = col * cellSize + penWidth + 2 * offset;
+            var y = row * cellSize + penWidth + 2 * offset;
+            return new Rectangle(x, y, cellSize - cellOffset, cellSize - cellOffset);
         }
     }
 }
