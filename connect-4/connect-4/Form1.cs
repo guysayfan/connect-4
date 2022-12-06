@@ -18,10 +18,13 @@ namespace connect_4
         Brush brushRed = new SolidBrush(Color.Red);
         Brush brushYellow = new SolidBrush(Color.Yellow);
 
-        Board board = new Board();
+        IGameEngine engine = new GameEngine();
+
+        IBoard board = null;
 
         public connect4()
         {
+            board = engine.GetBoard();
             InitializeComponent();
             MaximizeBox = false;
             MinimizeBox = false;
@@ -77,7 +80,7 @@ namespace connect_4
 
             if (col != -1 && !board.IsColFull(col))
             {
-                var row = board.DropPiece(col, 0);
+                var row = board.DropPiece(col, engine.GetActivePlayer());
                 var cell = calcCellRect(row, col);
                 Invalidate(cell);
             }

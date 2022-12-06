@@ -2,7 +2,7 @@
 
 namespace connect_4_core
 {
-    public class Board
+    public class Board : IBoard
     {
         int?[,] board = new int?[7, 6];
 
@@ -128,6 +128,31 @@ namespace connect_4_core
                 }
             }
             return false;
+        }
+
+        int IBoard.FindTopRow(int col)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IBoard.CheckRowWin(int row, int player)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IBoard.CheckColWin(int col, int player)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IBoard.CheckTopLeftBotRightWin(int initCol, int initRow, int player)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IBoard.CheckTopRightBotLeftWin(int initCol, int initRow, int player)
+        {
+            throw new NotImplementedException();
         }
 
         //static bool hasPlayerRow(int step, int player)
