@@ -9,6 +9,7 @@ namespace connect_4_core
     public class GameEngine : IGameEngine
     {
         IBoard board = new Board();
+
         int activePlayer = 1;
         public int GetActivePlayer()
         {
@@ -31,6 +32,26 @@ namespace connect_4_core
         public IBoard GetBoard()
         {
             return board;
+        }
+
+
+        public void Run(IPlayer p1, IPlayer p2)
+        {
+            IPlayer[] players = {p1, p2};
+            int col;
+            int activePlayer = 0;
+
+            while (!IsGameOver()) {
+                col = players[activePlayer].Play(board);
+                board.DropPiece(col, activePlayer + 1);
+
+                activePlayer = activePlayer == 0 ? 0 : 1;
+            }
+        }
+
+        private bool IsGameOver()
+        {
+            return false;
         }
     }
 }

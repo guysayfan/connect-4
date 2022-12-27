@@ -22,6 +22,7 @@ namespace connect_4
 
         IBoard board = null;
 
+
         public connect4()
         {
             board = engine.GetBoard();

@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace connect_4_core
 {
-    public interface IGameEngine
+    public interface IPlayer
     {
-        int GetActivePlayer();
-
-        int GetWinner();
-
-        void Run();
-
-        IBoard GetBoard();
+        int Play(IBoard board);
     }
 }
