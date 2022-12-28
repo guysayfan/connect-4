@@ -4,13 +4,14 @@ using System.Runtime.CompilerServices;
 
 namespace connect_4
 {
-    public partial class connect4 : Form
+    public partial class connect4 : Form, IGameEngineEvents, IPlayer
     {
         const int penWidth = 4;
         const int offset = 30;
         const int cellOffset = 8;
         const int cellSize = 80;
 
+        int clickedCol = -1;
         Pen penRed = new Pen(Color.Red, penWidth);
         Pen penDarkBlue = new Pen(Color.DarkBlue, penWidth);
         Brush brushBlue = new SolidBrush(Color.Blue);
@@ -20,7 +21,7 @@ namespace connect_4
 
         IGameEngine engine = new GameEngine();
 
-        IBoard board = null;
+        IBoard board;
 
 
         public connect4()
@@ -35,6 +36,8 @@ namespace connect_4
             var width = 2 * (penWidth + 2 * offset) + 7 * cellSize;
             var height = 2 * (penWidth + 2 * offset) + 6 * cellSize;
             ClientSize = new Size(width, height);
+
+            Task.Run(() => engine.Run(new SimpleAIPlayer(), this, this));
         }
 
         private void connect4_Paint(object sender, PaintEventArgs e)
@@ -81,9 +84,7 @@ namespace connect_4
 
             if (col != -1 && !board.IsColFull(col))
             {
-                var row = board.DropPiece(col, engine.GetActivePlayer());
-                var cell = calcCellRect(row, col);
-                Invalidate(cell);
+                clickedCol = col;
             }
         }
 
@@ -105,6 +106,29 @@ namespace connect_4
             var x = col * cellSize + penWidth + 2 * offset;
             var y = row * cellSize + penWidth + 2 * offset;
             return new Rectangle(x, y, cellSize - cellOffset, cellSize - cellOffset);
+        }
+
+        public void OnDropPiece(int row, int col)
+        {
+            var cell = calcCellRect(row, col);
+            Invalidate(cell);
+        }
+
+
+        public int Play(IBoard board)
+        {
+            while (clickedCol == -1) {
+                Thread.Sleep(100);
+            }
+
+            var result = clickedCol;
+            clickedCol = -1;
+            return result;
+        }
+
+        public void OnGameOver()
+        {
+            throw new NotImplementedException();
         }
     }
 }

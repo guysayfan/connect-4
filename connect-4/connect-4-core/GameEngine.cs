@@ -26,7 +26,7 @@ namespace connect_4_core
 
         public int GetWinner()
         {
-            throw new NotImplementedException();
+            return -1;
         }
 
         public IBoard GetBoard()
@@ -35,7 +35,7 @@ namespace connect_4_core
         }
 
 
-        public void Run(IPlayer p1, IPlayer p2)
+        public void Run(IPlayer p1, IPlayer p2, IGameEngineEvents sink)
         {
             IPlayer[] players = {p1, p2};
             int col;
@@ -43,10 +43,12 @@ namespace connect_4_core
 
             while (!IsGameOver()) {
                 col = players[activePlayer].Play(board);
-                board.DropPiece(col, activePlayer + 1);
+                var row = board.DropPiece(col, activePlayer);
+                sink.OnDropPiece(row, col);
 
-                activePlayer = activePlayer == 0 ? 0 : 1;
+                activePlayer = activePlayer == 0 ? 1 : 0;
             }
+            sink.OnGameOver();
         }
 
         private bool IsGameOver()

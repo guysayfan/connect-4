@@ -12,7 +12,7 @@ namespace connect_4_core
 
         int GetWinner();
 
-        void Run();
+        void Run(IPlayer player1, IPlayer player2, IGameEngineEvents sink);
 
         IBoard GetBoard();
     }
