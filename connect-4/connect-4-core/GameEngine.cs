@@ -48,11 +48,22 @@ namespace connect_4_core
 
                 activePlayer = activePlayer == 0 ? 1 : 0;
             }
-            sink.OnGameOver();
+            sink.OnGameOver(GetWinner());
         }
 
         private bool IsGameOver()
         {
+            int counter = 0;
+            for (int i = 0; i < 7; i++)
+            {
+                if (board.IsColFull(i))
+                {
+                    counter++;
+                }
+            }
+
+            if (counter == 7) return true;
+
             return false;
         }
     }

@@ -10,6 +10,6 @@ namespace connect_4_core
     {
         void OnDropPiece(int row, int col);
 
-        void OnGameOver();
+        void OnGameOver(int winner);
     }
 }

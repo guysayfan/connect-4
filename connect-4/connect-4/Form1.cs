@@ -126,9 +126,20 @@ namespace connect_4
             return result;
         }
 
-        public void OnGameOver()
+        public void OnGameOver(int winner)
         {
-            throw new NotImplementedException();
+            string message;
+            if (winner == 0)
+            {
+                message = "You win!";
+            } else if (winner == 1)
+            {
+                message = "You lose. :(";
+            } else
+            {
+                message = "It's a tie!";
+            }
+            MessageBox.Show(message, "GAME OVER");
         }
     }
 }
