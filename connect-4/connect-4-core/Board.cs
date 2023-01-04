@@ -34,7 +34,8 @@ namespace connect_4_core
         //}
 
         // Finds next available row to place piece
-        private int FindTopRow(int col)
+
+        public int FindTopRow(int col)
         {
             for (int row = 5; row >= 0; row--)
             {
@@ -46,10 +47,10 @@ namespace connect_4_core
             return -1;
         }
 
-        private bool CheckRowWin (int row, int player)
+        bool IBoard.CheckRowWin(int row, int player)
         {
             var count = 0;
-            for (int col = 0; col < 7; col ++)
+            for (int col = 0; col < 7; col++)
             {
                 if (board[col, row] == player)
                 {
@@ -58,7 +59,8 @@ namespace connect_4_core
                     {
                         return true;
                     }
-                } else
+                }
+                else
                 {
                     count = 0;
                 }
@@ -66,7 +68,7 @@ namespace connect_4_core
             return false;
         }
 
-        private bool CheckColWin(int col, int player)
+        bool IBoard.CheckColWin(int col, int player)
         {
             var count = 0;
             for (int row = 0; row < 6; row++)
@@ -87,7 +89,7 @@ namespace connect_4_core
             return false;
         }
 
-        private bool CheckTopLeftBotRightWin(int initCol, int initRow, int player)
+        bool IBoard.CheckTopLeftBotRightWin(int initCol, int initRow, int player)
         {
             var count = 0;
             var steps = initRow == 0 ? 7 - initCol : 6 - initRow;
@@ -100,7 +102,8 @@ namespace connect_4_core
                     {
                         return true;
                     }
-                } else
+                }
+                else
                 {
                     count = 0;
                 }
@@ -108,7 +111,7 @@ namespace connect_4_core
             return false;
         }
 
-        private bool CheckTopRightBotLeftWin(int initCol, int initRow, int player)
+        bool IBoard.CheckTopRightBotLeftWin(int initCol, int initRow, int player)
         {
             var count = 0;
             var steps = initCol == 0 ? initRow + 1 : 7 - initCol;
@@ -128,31 +131,6 @@ namespace connect_4_core
                 }
             }
             return false;
-        }
-
-        int IBoard.FindTopRow(int col)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IBoard.CheckRowWin(int row, int player)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IBoard.CheckColWin(int col, int player)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IBoard.CheckTopLeftBotRightWin(int initCol, int initRow, int player)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IBoard.CheckTopRightBotLeftWin(int initCol, int initRow, int player)
-        {
-            throw new NotImplementedException();
         }
 
         //static bool hasPlayerRow(int step, int player)

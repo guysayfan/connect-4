@@ -37,7 +37,7 @@ namespace connect_4
             var height = 2 * (penWidth + 2 * offset) + 6 * cellSize;
             ClientSize = new Size(width, height);
 
-            Task.Run(() => engine.Run(new SimpleAIPlayer(), this, this));
+            Task.Run(() => engine.Run(this, new SimpleAIPlayer(), this));
         }
 
         private void connect4_Paint(object sender, PaintEventArgs e)

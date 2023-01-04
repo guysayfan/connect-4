@@ -8,25 +8,27 @@ namespace connect_4_core
 {
     public class GameEngine : IGameEngine
     {
-        IBoard board = new Board();
+        IBoard board;
 
-        int activePlayer = 1;
+        Random rnd;
+        int activePlayer;
+
+        int winner = -1;
+
+        public GameEngine()
+        {
+            board = new Board();
+            rnd = new Random();
+            activePlayer = rnd.Next(2);
+        }
         public int GetActivePlayer()
         {
-            if (activePlayer == 0)
-            {
-                activePlayer = 1;
-            } else if (activePlayer == 1)
-            {
-                activePlayer = 0;
-            }
-
             return activePlayer;
         }
 
         public int GetWinner()
         {
-            return -1;
+            return winner;
         }
 
         public IBoard GetBoard()
@@ -38,20 +40,21 @@ namespace connect_4_core
         public void Run(IPlayer p1, IPlayer p2, IGameEngineEvents sink)
         {
             IPlayer[] players = {p1, p2};
-            int col;
-            int activePlayer = 0;
+            
+            int col = 0;
+            int row = 0;
+            
 
-            while (!IsGameOver()) {
-                col = players[activePlayer].Play(board);
-                var row = board.DropPiece(col, activePlayer);
-                sink.OnDropPiece(row, col);
-
+            while (!IsGameOver(col, row)) {
                 activePlayer = activePlayer == 0 ? 1 : 0;
+                col = players[activePlayer].Play(board);
+                row = board.DropPiece(col, activePlayer);
+                sink.OnDropPiece(row, col);
             }
             sink.OnGameOver(GetWinner());
         }
 
-        private bool IsGameOver()
+        private bool IsGameOver(int col, int row)
         {
             int counter = 0;
             for (int i = 0; i < 7; i++)
@@ -62,9 +65,17 @@ namespace connect_4_core
                 }
             }
 
-            if (counter == 7) return true;
-
-            return false;
+            if (board.CheckRowWin(row, activePlayer))
+            {
+                winner = activePlayer;
+                return true;
+            } else if (board.CheckColWin(col, activePlayer))
+            {
+                winner = activePlayer;
+                return true;
+            }
+                
+            return counter == 7;
         }
     }
 }
