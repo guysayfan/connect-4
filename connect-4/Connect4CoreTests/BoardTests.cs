@@ -47,6 +47,54 @@ namespace connect_4_core.Tests
             }
         }
 
+        [TestMethod()]
+        public void CheckWinTopLeftBottomRight_Test()
+        {
+            var win = b.CheckTopLeftBotRightWin(0, 2, 0);
+            Assert.IsFalse(win);
+            // 
+
+            List<int[]> p1List = new List<int[]>();
+            p1List.Add(new int[] { 0, 0 });
+            p1List.Add(new int[] { 1, 1 });
+            p1List.Add(new int[] { 2, 2 });
+            p1List.Add(new int[] { 3, 3 });
+
+            List<int[]> p2List = new List<int[]>();
+            b.Populate(p1List, p2List);
+
+            win = b.CheckTopLeftBotRightWin(0, 0, 0);
+            Assert.IsTrue(win);
+
+            p2List.Add(new int[] { 2, 2 });
+            b.Populate(p1List, p2List);
+            win = b.CheckTopLeftBotRightWin(0, 0, 0);
+            Assert.IsFalse(win);
+        }
+
+        [TestMethod()]
+        public void CheckWinTopRightBottomLeft_Test()
+        {
+            var win = b.CheckTopRightBotLeftWin(6, 0, 0);
+            Assert.IsFalse(win);
+            // 
+
+            List<int[]> p1List = new List<int[]>();
+            p1List.Add(new int[] { 6, 0 });
+            p1List.Add(new int[] { 5, 1 });
+            p1List.Add(new int[] { 4, 2 });
+            p1List.Add(new int[] { 3, 3 });
+
+            List<int[]> p2List = new List<int[]>();
+            b.Populate(p1List, p2List);
+
+            win = b.CheckTopRightBotLeftWin(6, 0, 0);
+            Assert.IsTrue(win);
+
+            p2List.Add(new int[] { 4, 2 });
+            b.Populate(p1List, p2List);
+            Assert.IsTrue(win);
+        }
         //[TestMethod()]
         //public void IsColFullTest()
         //{
