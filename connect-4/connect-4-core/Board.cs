@@ -6,7 +6,7 @@ namespace connect_4_core
     {
         int?[,] board = new int?[7, 6];
 
-        public int DropPiece(int col, int player)
+        public int DropPiece(uint col, int player)
         {
             var topRow = FindTopRow(col);
             if (topRow == -1)
@@ -18,14 +18,14 @@ namespace connect_4_core
             return topRow;
         }
 
-        public bool IsColFull(int col)
+        public bool IsColFull(uint col)
         {
             return FindTopRow(col) == -1;
         }
         
-        public int? GetPlayer(int col, int row)
+        public int? GetPlayer(Location location)
         {
-            return board[col, row];
+            return board[location.Col, location.Row];
         }
 
         //public bool CheckVictory(int player, int lastPieceRow, int lastPieceCol)
@@ -35,7 +35,7 @@ namespace connect_4_core
 
         // Finds next available row to place piece
 
-        public int FindTopRow(int col)
+        public int FindTopRow(uint col)
         {
             for (int row = 5; row >= 0; row--)
             {
@@ -47,7 +47,7 @@ namespace connect_4_core
             return -1;
         }
 
-        public bool CheckRowWin(int row, int player)
+        public bool CheckRowWin(uint row, int player)
         {
             var count = 0;
             for (int col = 0; col < 7; col++)
@@ -68,7 +68,7 @@ namespace connect_4_core
             return false;
         }
 
-        public bool CheckColWin(int col, int player)
+        public bool CheckColWin(uint col, int player)
         {
             var count = 0;
             for (int row = 0; row < 6; row++)
@@ -89,8 +89,11 @@ namespace connect_4_core
             return false;
         }
 
-        public bool CheckTopLeftBotRightWin(int initCol, int initRow, int player)
+        public bool CheckTopLeftBotRightWin(Location location, int player)
         {
+            var initCol = location.Col;
+            var initRow = location.Row;
+
             var count = 0;
             var steps = initRow == 0 ? 6 - initCol : 6 - initRow;
             for (int i = 0; i < steps; i++)
@@ -111,8 +114,11 @@ namespace connect_4_core
             return false;
         }
 
-        public bool CheckTopRightBotLeftWin(int initCol, int initRow, int player)
+        public bool CheckTopRightBotLeftWin(Location location, int player)
         {
+            var initCol = location.Col;
+            var initRow = location.Row;
+
             var count = 0;
             var steps = initCol == 0 ? initRow + 1 : Math.Min
                 (initCol + 1, 6);

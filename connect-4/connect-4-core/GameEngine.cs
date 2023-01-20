@@ -54,6 +54,25 @@ namespace connect_4_core
             sink.OnGameOver(GetWinner());
         }
 
+        public int[] GetTopLeftBotRightInit(int col, int row)
+        {
+            int[] initials = { col, row };
+            if (col > row)
+            {
+                initials[0] = col -= row;
+                initials[1] = row;
+            } else if (col < row)
+            {
+                initials[0] = 0;
+                initials[1] = row -= col;
+            } else
+            {
+                initials[0] = 0;
+                initials[1] = 0;
+            }
+            return initials;
+        }
+
         private bool IsGameOver(int col, int row)
         {
             int counter = 0;
@@ -65,6 +84,8 @@ namespace connect_4_core
                 }
             }
 
+            int[] initials = GetTopLeftBotRightInit(col, row);
+
             if (board.CheckRowWin(row, activePlayer))
             {
                 winner = activePlayer;
@@ -73,8 +94,17 @@ namespace connect_4_core
             {
                 winner = activePlayer;
                 return true;
+            } else if (board.CheckTopLeftBotRightWin(initials[0], initials[1], activePlayer))
+            {
+                    winner = activePlayer;
+                return true;
             }
-                
+            //else if (board.CheckTopRightBotLeftWin(, activePlayer))
+            //{
+            //    winner = activePlayer;
+            //    return true;
+            //}
+
             return counter == 7;
         }
     }
