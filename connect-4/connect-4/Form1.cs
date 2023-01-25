@@ -6,12 +6,14 @@ namespace connect_4
 {
     public partial class connect4 : Form, IGameEngineEvents, IPlayer
     {
+        const int INVALID_COL = 999;
+
         const int penWidth = 4;
         const int offset = 30;
         const int cellOffset = 8;
         const int cellSize = 80;
 
-        int clickedCol = -1;
+        uint clickedCol = INVALID_COL;
         Pen penRed = new Pen(Color.Red, penWidth);
         Pen penDarkBlue = new Pen(Color.DarkBlue, penWidth);
         Brush brushBlue = new SolidBrush(Color.Blue);
@@ -50,7 +52,7 @@ namespace connect_4
 
         }
 
-        private void drawCell(Graphics g, Pen p, int x, int y, Brush color)
+        private void drawCell(Graphics g, Pen p, uint x, uint y, Brush color)
         {
             g.FillRectangle(brushBlue, offset + x, offset + y, cellSize, cellSize);
             g.FillEllipse(color, offset + x + cellOffset, offset + y + cellOffset, cellSize - cellOffset * 2, cellSize - (cellOffset * 2));
@@ -59,11 +61,13 @@ namespace connect_4
 
         private void drawBoard(Graphics g)
         {
-            for (int col = 0; col < 7; col++)
+            
+            for (uint col = 0; col < 7; col++)
             {
-                for (int row = 0; row < 6; row++)
+                for (uint row = 0; row < 6; row++)
                 {
-                    var player = board.GetPlayer(col, row);
+                    var location = new Location(col, row);
+                    var player = board.GetPlayer(location);
                     Brush color = brushWhite;
                     if (player == 0)
                     {
@@ -80,53 +84,53 @@ namespace connect_4
 
         private void connect4_MouseClick(object sender, MouseEventArgs e)
         {
-            var col = getClickedCol(e);
+            uint col = getClickedCol(e);
 
-            if (col != -1 && !board.IsColFull(col))
+            if (col != INVALID_COL && !board.IsColFull(col))
             {
                 clickedCol = col;
             }
         }
 
-        private int getClickedCol(MouseEventArgs e)
+        private uint getClickedCol(MouseEventArgs e)
         {
             var clickX = e.Location.X - (2 * offset + penWidth);
 
-            for (int col = 0; col < 7; col++)
+            for (uint col = 0; col < 7; col++)
             {
                 if (clickX > cellSize * col && clickX < cellSize * (col + 1)) {
                     return col;
                 }
             }
-            return -1;
+            return INVALID_COL;
         }
 
-        private Rectangle calcCellRect(int row, int col)
+        private Rectangle calcCellRect(Location location)
         {
-            var x = col * cellSize + penWidth + 2 * offset;
-            var y = row * cellSize + penWidth + 2 * offset;
-            return new Rectangle(x, y, cellSize - cellOffset, cellSize - cellOffset);
+            var x = location.Col * cellSize + penWidth + 2 * offset;
+            var y = location.Row * cellSize + penWidth + 2 * offset;
+            return new Rectangle((int)x, (int)y, cellSize - cellOffset, cellSize - cellOffset);
         }
 
-        public void OnDropPiece(int row, int col)
+        public void OnDropPiece(Location location)
         {
-            var cell = calcCellRect(row, col);
+            var cell = calcCellRect(location);
             Invalidate(cell);
         }
 
 
-        public int Play(IBoard board)
+        public uint Play(IBoard board)
         {
-            while (clickedCol == -1) {
+            while (clickedCol == INVALID_COL) {
                 Thread.Sleep(100);
             }
 
             var result = clickedCol;
-            clickedCol = -1;
+            clickedCol = INVALID_COL;
             return result;
         }
 
-        public void OnGameOver(int winner)
+        public void OnGameOver(uint winner)
         {
             string message;
             if (winner == 0)

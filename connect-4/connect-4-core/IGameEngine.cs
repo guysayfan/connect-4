@@ -8,9 +8,9 @@ namespace connect_4_core
 {
     public interface IGameEngine
     {
-        int GetActivePlayer();
+        uint GetActivePlayer();
 
-        int GetWinner();
+        uint GetWinner();
 
         void Run(IPlayer player1, IPlayer player2, IGameEngineEvents sink);
 

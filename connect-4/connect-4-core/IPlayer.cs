@@ -8,6 +8,6 @@ namespace connect_4_core
 {
     public interface IPlayer
     {
-        int Play(IBoard board);
+        uint Play(IBoard board);
     }
 }

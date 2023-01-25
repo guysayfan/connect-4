@@ -8,20 +8,20 @@ namespace connect_4_core
 {
     public interface IBoard
     {
-        int DropPiece(uint col, int player);
+        uint DropPiece(uint col, uint player);
 
         bool IsColFull(uint col);
 
-        int? GetPlayer(Location location);
+        uint? GetPlayer(Location location);
 
-        int FindTopRow(uint col);
+        uint FindTopRow(uint col);
 
-        bool CheckRowWin(uint row, int player);
+        bool CheckRowWin(uint row, uint player);
 
-        bool CheckColWin(uint col, int player);
+        bool CheckColWin(uint col, uint player);
 
-        bool CheckTopLeftBotRightWin(Location location, int player);
+        bool CheckTopLeftBotRightWin(Location location, uint player);
 
-        bool CheckTopRightBotLeftWin(Location location, int player);
+        bool CheckTopRightBotLeftWin(Location location, uint player);
     }
 }

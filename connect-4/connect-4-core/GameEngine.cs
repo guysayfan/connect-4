@@ -8,25 +8,27 @@ namespace connect_4_core
 {
     public class GameEngine : IGameEngine
     {
+        const uint NO_WINNER = 999;
+
         IBoard board;
 
         Random rnd;
-        int activePlayer;
+        uint activePlayer;
 
-        int winner = -1;
+        uint winner = NO_WINNER;
 
         public GameEngine()
         {
             board = new Board();
             rnd = new Random();
-            activePlayer = rnd.Next(2);
+            activePlayer = (uint)rnd.Next(2);
         }
-        public int GetActivePlayer()
+        public uint GetActivePlayer()
         {
             return activePlayer;
         }
 
-        public int GetWinner()
+        public uint GetWinner()
         {
             return winner;
         }
@@ -40,43 +42,54 @@ namespace connect_4_core
         public void Run(IPlayer p1, IPlayer p2, IGameEngineEvents sink)
         {
             IPlayer[] players = {p1, p2};
-            
-            int col = 0;
-            int row = 0;
-            
 
-            while (!IsGameOver(col, row)) {
-                activePlayer = activePlayer == 0 ? 1 : 0;
-                col = players[activePlayer].Play(board);
-                row = board.DropPiece(col, activePlayer);
-                sink.OnDropPiece(row, col);
+            Location location = new Location(0, 0);
+            while (!IsGameOver(location)) {
+                activePlayer = activePlayer == 0U ? 1U : 0U;
+                location.Col = players[activePlayer].Play(board);
+                location.Row = board.DropPiece(location.Col, activePlayer);
+                sink.OnDropPiece(location);
             }
             sink.OnGameOver(GetWinner());
         }
 
-        public int[] GetTopLeftBotRightInit(int col, int row)
+        public Location GetTopLeftBotRightInit(Location location)
         {
-            int[] initials = { col, row };
-            if (col > row)
+            Location initials = new Location(0, 0);
+            if (location.Col > location.Row)
             {
-                initials[0] = col -= row;
-                initials[1] = row;
-            } else if (col < row)
+                initials.Col = location.Col - location.Row;
+                initials.Row = location.Row;
+            } else if (location.Col < location.Row)
             {
-                initials[0] = 0;
-                initials[1] = row -= col;
-            } else
-            {
-                initials[0] = 0;
-                initials[1] = 0;
+                initials.Col = 0;
+                initials.Row = location.Row - location.Col;
             }
+
             return initials;
         }
 
-        private bool IsGameOver(int col, int row)
+        public Location GetTopRightBotLeftInit(Location location)
+        {
+            Location initials = new Location(0, 0);
+            //if (location.Col > location.Row)
+            //{
+            //    initials.Col = location.Col - location.Row;
+            //    initials.Row = location.Row;
+            //}
+            //else if (location.Col < location.Row)
+            //{
+            //    initials.Col = 0;
+            //    initials.Row = location.Row - location.Col;
+            //}
+
+            return initials;
+        }
+
+        private bool IsGameOver(Location location)
         {
             int counter = 0;
-            for (int i = 0; i < 7; i++)
+            for (uint i = 0; i < 7; i++)
             {
                 if (board.IsColFull(i))
                 {
@@ -84,26 +97,26 @@ namespace connect_4_core
                 }
             }
 
-            int[] initials = GetTopLeftBotRightInit(col, row);
+            Location initialsTopLeft = GetTopLeftBotRightInit(location);
+            Location initialsTopRight = GetTopRightBotLeftInit(location);
 
-            if (board.CheckRowWin(row, activePlayer))
+            if (board.CheckRowWin(location.Row, activePlayer))
             {
                 winner = activePlayer;
                 return true;
-            } else if (board.CheckColWin(col, activePlayer))
+            } else if (board.CheckColWin(location.Col, activePlayer))
             {
                 winner = activePlayer;
                 return true;
-            } else if (board.CheckTopLeftBotRightWin(initials[0], initials[1], activePlayer))
+            } else if (board.CheckTopLeftBotRightWin(initialsTopLeft, activePlayer))
             {
-                    winner = activePlayer;
+                winner = activePlayer;
+                return true;
+            } else if (board.CheckTopRightBotLeftWin(initialsTopRight, activePlayer))
+            {
+                winner = activePlayer;
                 return true;
             }
-            //else if (board.CheckTopRightBotLeftWin(, activePlayer))
-            //{
-            //    winner = activePlayer;
-            //    return true;
-            //}
 
             return counter == 7;
         }

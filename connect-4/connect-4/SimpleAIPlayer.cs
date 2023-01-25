@@ -11,15 +11,15 @@ namespace connect_4
     public class SimpleAIPlayer : IPlayer
     {
         Random rnd = new Random();
-        public int Play(IBoard board)
+        public uint Play(IBoard board)
         {
             Thread.Sleep(1000);
-            var col = rnd.Next(7);
-            while (board.IsColFull(col)) 
+            int col = rnd.Next(7);
+            while (board.IsColFull((uint)col)) 
             {
                 col = rnd.Next(7);
             }
-            return col;
+            return (uint)col;
         }
     }
 }

@@ -8,8 +8,8 @@ namespace connect_4_core
 {
     public interface IGameEngineEvents
     {
-        void OnDropPiece(int row, int col);
+        void OnDropPiece(Location location);
 
-        void OnGameOver(int winner);
+        void OnGameOver(uint winner);
     }
 }

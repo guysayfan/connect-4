@@ -4,12 +4,14 @@ namespace connect_4_core
 {
     public class Board : IBoard
     {
-        int?[,] board = new int?[7, 6];
+        const int INVALID_ROW = 999;
 
-        public int DropPiece(uint col, int player)
+        uint?[,] board = new uint?[7, 6];
+
+        public uint DropPiece(uint col, uint player)
         {
             var topRow = FindTopRow(col);
-            if (topRow == -1)
+            if (topRow == INVALID_ROW)
             {
                 throw new Exception("Col full");
             }
@@ -20,10 +22,10 @@ namespace connect_4_core
 
         public bool IsColFull(uint col)
         {
-            return FindTopRow(col) == -1;
+            return FindTopRow(col) == INVALID_ROW;
         }
         
-        public int? GetPlayer(Location location)
+        public uint? GetPlayer(Location location)
         {
             return board[location.Col, location.Row];
         }
@@ -35,19 +37,19 @@ namespace connect_4_core
 
         // Finds next available row to place piece
 
-        public int FindTopRow(uint col)
+        public uint FindTopRow(uint col)
         {
-            for (int row = 5; row >= 0; row--)
+            for (uint row = 5; row >= 0; row--)
             {
                 if (board[col, row] == null)
                 {
                     return row;
                 }
             }
-            return -1;
+            return INVALID_ROW;
         }
 
-        public bool CheckRowWin(uint row, int player)
+        public bool CheckRowWin(uint row, uint player)
         {
             var count = 0;
             for (int col = 0; col < 7; col++)
@@ -68,7 +70,7 @@ namespace connect_4_core
             return false;
         }
 
-        public bool CheckColWin(uint col, int player)
+        public bool CheckColWin(uint col, uint player)
         {
             var count = 0;
             for (int row = 0; row < 6; row++)
@@ -89,7 +91,7 @@ namespace connect_4_core
             return false;
         }
 
-        public bool CheckTopLeftBotRightWin(Location location, int player)
+        public bool CheckTopLeftBotRightWin(Location location, uint player)
         {
             var initCol = location.Col;
             var initRow = location.Row;
@@ -114,7 +116,7 @@ namespace connect_4_core
             return false;
         }
 
-        public bool CheckTopRightBotLeftWin(Location location, int player)
+        public bool CheckTopRightBotLeftWin(Location location, uint player)
         {
             var initCol = location.Col;
             var initRow = location.Row;
@@ -174,7 +176,7 @@ namespace connect_4_core
 
         }
 
-        public int?[,] GetBoard()
+        public uint?[,] GetBoard()
         {
             return board;
         }
