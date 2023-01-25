@@ -39,8 +39,9 @@ namespace connect_4_core
 
         public uint FindTopRow(uint col)
         {
-            for (uint row = 5; row >= 0; row--)
+            for (uint i = 0; i < 6; i++)
             {
+                var row = 5 - i;
                 if (board[col, row] == null)
                 {
                     return row;
@@ -89,6 +90,20 @@ namespace connect_4_core
                 }
             }
             return false;
+        }
+
+        public uint CalcTopLeftBotRightSteps(Location location)
+        {
+            uint steps = 0;
+            if (location.Col <= location.Row)
+            {
+                steps = 6 - location.Row;
+            } else
+            {
+                steps = 7 - location.Col;
+            }
+
+            return steps;
         }
 
         public bool CheckTopLeftBotRightWin(Location location, uint player)

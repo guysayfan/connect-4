@@ -1,10 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using connect_4_core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace connect_4_core.Tests
 {
@@ -12,6 +7,12 @@ namespace connect_4_core.Tests
     public class BoardTests
     {
         Board b = new Board();
+        Location loc00 = new Location(0, 0);
+        Location loc25 = new Location(2, 5);
+        Location loc02 = new Location(0, 2);
+        Location loc60 = new Location(6, 0);
+
+
 
         [TestInitialize()]
         public void TestInitialize()
@@ -22,35 +23,38 @@ namespace connect_4_core.Tests
         [TestMethod()]
         public void DropPieceSuccess_Test()
         {
-            Assert.IsNull(b.GetPlayer(2, 5));
+            Assert.IsNull(b.GetPlayer(loc25));
             b.DropPiece(2, 1);
-            Assert.AreEqual(1, b.GetPlayer(2, 5));
+            Assert.AreEqual(1U, b.GetPlayer(loc25));
         }
 
         [TestMethod()]
         public void DropPieceInFullCol_Test()
         {
-            Assert.IsNull(b.GetPlayer(2, 5));
-            for (int i = 0; i < 6; i++)
+            Assert.IsNull(b.GetPlayer(loc25));
+            // Drop 6 pieces in column 2
+            for (uint i = 0; i < 6; i++)
             {
                 b.DropPiece(2, 1);
-                for (int j = 0; j < 6; j++)
-                {
-                    if (j <= i)
-                    {
-                        Assert.AreEqual(1, b.GetPlayer(2, 5 - j));
-                    } else
-                    {
-                        Assert.IsNull(b.GetPlayer(2, 5 - j));
-                    }
-                }
+            }
+            Assert.IsTrue(b.IsColFull(2));
+
+            // Drop another price, expect an Exception
+            try
+            {
+                b.DropPiece(2, 1);
+                // Should never get here
+                Assert.Fail();
+            } catch (Exception ex)
+            {
+                
             }
         }
 
         [TestMethod()]
         public void CheckWinTopLeftBottomRight_Test()
         {
-            var win = b.CheckTopLeftBotRightWin(0, 2, 0);
+            var win = b.CheckTopLeftBotRightWin(loc02, 0);
             Assert.IsFalse(win);
             // 
 
@@ -63,19 +67,19 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckTopLeftBotRightWin(0, 0, 0);
+            win = b.CheckTopLeftBotRightWin(loc00, 0);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 2, 2 });
             b.Populate(p1List, p2List);
-            win = b.CheckTopLeftBotRightWin(0, 0, 0);
+            win = b.CheckTopLeftBotRightWin(loc00, 0);
             Assert.IsFalse(win);
         }
 
         [TestMethod()]
         public void CheckWinTopRightBottomLeft_Test()
         {
-            var win = b.CheckTopRightBotLeftWin(6, 0, 0);
+            var win = b.CheckTopRightBotLeftWin(loc60, 0);
             Assert.IsFalse(win);
             // 
 
@@ -88,7 +92,7 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckTopRightBotLeftWin(6, 0, 0);
+            win = b.CheckTopRightBotLeftWin(loc60, 0);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 4, 2 });

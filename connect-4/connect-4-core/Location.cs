@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,11 @@ namespace connect_4_core
             }
             Col = col;
             Row = row;
+        }
+
+        public Location Copy()
+        {
+            return new Location(Col, Row);
         }
     }
 }
