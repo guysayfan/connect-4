@@ -59,7 +59,7 @@ namespace connect_4_core
             if (location.Col > location.Row)
             {
                 initials.Col = location.Col - location.Row;
-                initials.Row = location.Row;
+                initials.Row = 0;
             } else if (location.Col < location.Row)
             {
                 initials.Col = 0;
@@ -69,19 +69,22 @@ namespace connect_4_core
             return initials;
         }
 
-        public Location GetTopRightBotLeftInit(Location location)
+        public Location GetBotLeftTopRightInit(Location location)
         {
-            Location initials = new Location(0, 0);
-            //if (location.Col > location.Row)
-            //{
-            //    initials.Col = location.Col - location.Row;
-            //    initials.Row = location.Row;
-            //}
-            //else if (location.Col < location.Row)
-            //{
-            //    initials.Col = 0;
-            //    initials.Row = location.Row - location.Col;
-            //}
+            Location initials = new Location(0, 5);
+            if (location.Col > 5 - location.Row)
+            {
+                initials.Col = location.Col - (5 - location.Row);
+                initials.Row = 5;
+            } else if (location.Col + location.Row == 5)
+            {
+                initials.Col = 0;
+                initials.Row = 5;
+            } else if (location.Col < location.Row)
+            {
+                initials.Row += initials.Col;
+                initials.Col = 0;
+            } 
 
             return initials;
         }
@@ -98,7 +101,7 @@ namespace connect_4_core
             }
 
             Location initialsTopLeft = GetTopLeftBotRightInit(location);
-            Location initialsTopRight = GetTopRightBotLeftInit(location);
+            Location initialsBotLeft = GetBotLeftTopRightInit(location);
 
             if (board.CheckRowWin(location.Row, activePlayer))
             {
@@ -112,7 +115,7 @@ namespace connect_4_core
             {
                 winner = activePlayer;
                 return true;
-            } else if (board.CheckTopRightBotLeftWin(initialsTopRight, activePlayer))
+            } else if (board.CheckBotLeftTopRightWin(initialsBotLeft, location, activePlayer))
             {
                 winner = activePlayer;
                 return true;

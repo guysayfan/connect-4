@@ -111,30 +111,56 @@ namespace connect_4_core
             var initCol = location.Col;
             var initRow = location.Row;
 
+            if (initCol > 3 || initRow > 3)
+            {
+                return false;
+            }
             var count = 0;
             var steps = initRow == 0 ? 6 - initCol : 6 - initRow;
             for (int i = 0; i < steps; i++)
             {
-                if (board[initCol + i, initRow + i] == player)
+                try
                 {
-                    count++;
-                    if (count == 4)
+                    if (board[initCol + i, initRow + i] == player)
                     {
-                        return true;
+                        count++;
+                        if (count == 4)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        count = 0;
                     }
                 }
-                else
-                {
-                    count = 0;
+                catch (Exception e) {
+                    if (board[initCol + i, initRow + i] == player)
+                    {
+                        count++;
+                        if (count == 4)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        count = 0;
+                    }
                 }
             }
             return false;
         }
 
-        public bool CheckTopRightBotLeftWin(Location location, uint player)
+        public bool CheckBotLeftTopRightWin(Location initLocation, Location clickLocation, uint player)
         {
-            var initCol = location.Col;
-            var initRow = location.Row;
+            var initCol = initLocation.Col;
+            var initRow = initLocation.Row;
+
+            if ((clickLocation.Row < 3 && clickLocation.Col < 3) || (clickLocation.Row > 3 && clickLocation.Col > 3))
+            {
+                return false;
+            }
 
             var count = 0;
             var steps = initCol == 0 ? initRow + 1 : Math.Min
@@ -142,12 +168,8 @@ namespace connect_4_core
             var dx = initCol == 0 ? 1 : -1;
             var dy = initRow == 0 ? 1 : -1;
 
-            if (initRow * initCol != 0) {
-                throw new Exception("One of initRow and initCol must be zero");
-            }
-
-            if (initRow + initCol < 3) {
-                return false;
+            if (initRow != 5 && initCol != 0) {
+                throw new Exception("initRow must equal 5 or initCol must equal 0");
             }
 
             for (int i = 0; i < steps; i++)

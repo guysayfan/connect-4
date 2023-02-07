@@ -22,6 +22,6 @@ namespace connect_4_core
 
         bool CheckTopLeftBotRightWin(Location location, uint player);
 
-        bool CheckTopRightBotLeftWin(Location location, uint player);
+        bool CheckBotLeftTopRightWin(Location initLocation, Location clickLocation, uint player);
     }
 }
