@@ -157,16 +157,13 @@ namespace connect_4_core
             var initCol = initLocation.Col;
             var initRow = initLocation.Row;
 
-            if ((clickLocation.Row < 3 && clickLocation.Col < 3) || (clickLocation.Row > 3 && clickLocation.Col > 3))
+            if ((clickLocation.Row + clickLocation.Col < 3) || (clickLocation.Row + clickLocation.Col > 8))
             {
                 return false;
             }
 
             var count = 0;
-            var steps = initCol == 0 ? initRow + 1 : Math.Min
-                (initCol + 1, 6);
-            var dx = initCol == 0 ? 1 : -1;
-            var dy = initRow == 0 ? 1 : -1;
+            var steps = initCol == 0 ? initCol + 1 : 7 - initCol;
 
             if (initRow != 5 && initCol != 0) {
                 throw new Exception("initRow must equal 5 or initCol must equal 0");
@@ -174,8 +171,8 @@ namespace connect_4_core
 
             for (int i = 0; i < steps; i++)
             {
-                var row = initRow + i * dy;
-                var col = initCol + i * dx;
+                var row = initRow - i;
+                var col = initCol + i;
                 if (board[col, row] == player)
                 {
                     count++;

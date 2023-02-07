@@ -8,9 +8,13 @@ namespace connect_4_core.Tests
     {
         Board b = new Board();
         Location loc00 = new Location(0, 0);
+        Location loc15 = new Location(1, 5);
         Location loc25 = new Location(2, 5);
         Location loc02 = new Location(0, 2);
         Location loc60 = new Location(6, 0);
+        Location loc35 = new Location(3, 5);
+        Location loc44 = new Location(4, 4);
+
 
 
 
@@ -77,9 +81,9 @@ namespace connect_4_core.Tests
         }
 
         [TestMethod()]
-        public void CheckWinTopRightBottomLeft_Test()
+        public void CheckWinBottomLeftTopRight_Test()
         {
-            var win = b.CheckBotLeftTopRightWin(loc60, 0);
+            var win = b.CheckBotLeftTopRightWin(loc15, loc60, 0);
             Assert.IsFalse(win);
             // 
 
@@ -92,12 +96,26 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckBotLeftTopRightWin(loc60, 0);
+            win = b.CheckBotLeftTopRightWin(loc15, loc60, 0);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 4, 2 });
             b.Populate(p1List, p2List);
             Assert.IsTrue(win);
+
+            p1List = new List<int[]>();
+            p1List.Add(new int[] { 3, 5 });
+            p1List.Add(new int[] { 4, 4 });
+            p1List.Add(new int[] { 5, 3 });
+            p1List.Add(new int[] { 6, 2 });
+
+            b.Populate(p1List, p2List);
+            win = b.CheckBotLeftTopRightWin(loc35, loc44, 0);
+            Assert.IsTrue(win);
+
+
+
+
         }
         //[TestMethod()]
         //public void IsColFullTest()
