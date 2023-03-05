@@ -2,7 +2,7 @@
 
 namespace connect_4_core
 {
-    public class Board : IBoard
+    public class Board : IBoard, ICloneable
     {
         const int INVALID_ROW = 999;
 
@@ -213,6 +213,11 @@ namespace connect_4_core
         public uint?[,] GetBoard()
         {
             return board;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
 
         //static bool hasPlayerRow(int step, int player)

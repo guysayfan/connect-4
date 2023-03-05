@@ -10,6 +10,8 @@ namespace connect_4_core
     {
         uint DropPiece(uint col, uint player);
 
+        void RemoveTopPiece(uint col);
+
         bool IsColFull(uint col);
 
         uint? GetPlayer(Location location);
