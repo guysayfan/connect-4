@@ -14,6 +14,8 @@ namespace connect_4_core.Tests
         Location loc60 = new Location(6, 0);
         Location loc35 = new Location(3, 5);
         Location loc44 = new Location(4, 4);
+        Location loc05 = new Location(0, 5);
+        Location loc32 = new Location(3, 2);
 
 
 
@@ -104,13 +106,13 @@ namespace connect_4_core.Tests
             Assert.IsTrue(win);
 
             p1List = new List<int[]>();
-            p1List.Add(new int[] { 3, 5 });
-            p1List.Add(new int[] { 4, 4 });
-            p1List.Add(new int[] { 5, 3 });
-            p1List.Add(new int[] { 6, 2 });
+            p1List.Add(new int[] { 0, 5 });
+            p1List.Add(new int[] { 1, 4 });
+            p1List.Add(new int[] { 2, 3 });
+            p1List.Add(new int[] { 3, 2 });
 
             b.Populate(p1List, p2List);
-            win = b.CheckBotLeftTopRightWin(loc35, loc44, 0);
+            win = b.CheckBotLeftTopRightWin(loc05, loc32, 0);
             Assert.IsTrue(win);
 
 

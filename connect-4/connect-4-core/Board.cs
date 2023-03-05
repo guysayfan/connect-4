@@ -163,7 +163,7 @@ namespace connect_4_core
             }
 
             var count = 0;
-            var steps = initCol == 0 ? initCol + 1 : 7 - initCol;
+            var steps = initCol == 0 ? initRow + 1 : 7 - initCol;
 
             if (initRow != 5 && initCol != 0) {
                 throw new Exception("initRow must equal 5 or initCol must equal 0");
@@ -243,3 +243,20 @@ namespace connect_4_core
         //}
     }
 }
+
+/************************
+
+0, 0 : 1
+0, 1 : 2
+0, 2 : 3
+0, 3 : 4
+0, 4 : 5
+0, 5 : 6
+1, 5 : 6
+2, 5 : 5
+3, 5 : 4
+4, 5 : 3
+5, 5 : 2
+6, 5 : 1
+
+*/
