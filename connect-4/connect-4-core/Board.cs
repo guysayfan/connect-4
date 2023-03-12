@@ -2,7 +2,7 @@
 
 namespace connect_4_core
 {
-    public class Board : IBoard, ICloneable
+    public class Board : IBoard
     {
         const int INVALID_ROW = 999;
 
@@ -18,6 +18,15 @@ namespace connect_4_core
             board[col, topRow] = player;
 
             return topRow;
+        }
+
+        public void RemoveTopPiece(uint col)
+        {
+            var topRow = FindTopRow(col);
+            if (topRow != INVALID_ROW)
+            {
+                board[col, topRow] = null;
+            }
         }
 
         public bool IsColFull(uint col)
@@ -215,9 +224,9 @@ namespace connect_4_core
             return board;
         }
 
-        public object Clone()
+        public IBoard Clone()
         {
-            return this.MemberwiseClone();
+            return (IBoard)this.MemberwiseClone();
         }
 
         //static bool hasPlayerRow(int step, int player)
