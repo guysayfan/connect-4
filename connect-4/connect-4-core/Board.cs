@@ -48,15 +48,19 @@ namespace connect_4_core
 
         public uint FindTopRow(uint col)
         {
-            for (uint i = 0; i < 6; i++)
-            {
-                var row = 5 - i;
-                if (board[col, row] == null)
+            if (board[col, 0] != null) {
+                return INVALID_ROW;
+            }
+
+            uint i;
+            for (i = 1; i < 6; i++)
+            {                
+                if (board[col, i] != null)
                 {
-                    return row;
+                    break;
                 }
             }
-            return INVALID_ROW;
+            return i - 1;
         }
 
         public bool CheckRowWin(uint row, uint player)

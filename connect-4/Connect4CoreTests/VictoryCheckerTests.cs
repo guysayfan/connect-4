@@ -82,12 +82,12 @@ namespace connect_4_core.Tests
             b.Set(2, 3, 0);
             b.Set(3, 2, 0);
 
-            var result = v.CheckBotLeftTopRightWin(b, 4, 0);
+            var result = v.CheckBotLeftTopRightWin(b, 2, 0);
             Assert.IsTrue(result);
 
-            b.Set(2, 3, 1);
+            b.Set(3, 2, 1);
 
-            result = v.CheckBotLeftTopRightWin(b, 4, 0);
+            result = v.CheckBotLeftTopRightWin(b, 2, 0);
             Assert.IsFalse(result);
         }
     }
