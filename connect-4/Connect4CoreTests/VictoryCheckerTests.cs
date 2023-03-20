@@ -7,16 +7,6 @@ namespace connect_4_core.Tests
     public class VictoryCheckerTests
     {
         Board b = new Board();
-        Location loc00 = new Location(0, 0);
-        Location loc15 = new Location(1, 5);
-        Location loc25 = new Location(2, 5);
-        Location loc02 = new Location(0, 2);
-        Location loc60 = new Location(6, 0);
-        Location loc35 = new Location(3, 5);
-        Location loc44 = new Location(4, 4);
-        Location loc05 = new Location(0, 5);
-        Location loc32 = new Location(3, 2);
-
         VictoryChecker v = new VictoryChecker();
 
 
