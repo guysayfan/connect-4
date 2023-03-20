@@ -10,7 +10,7 @@ namespace connect_4_core
 {
     public class VictoryChecker
     {
-        private bool CheckVerticalWin(IBoard board, uint col, uint player)
+        public bool CheckVerticalWin(IBoard board, uint col, uint player)
         {
             uint topRow = board.FindTopRow(col);
 
@@ -28,9 +28,10 @@ namespace connect_4_core
             return true;
         }
 
-        private bool CheckHorizontalWin(IBoard board, uint col, uint player)
+        public bool CheckHorizontalWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
+            uint row = board.FindTopRow(col);
 
             // Left check
             for (uint i = 1; i < 4; i++)
@@ -39,7 +40,7 @@ namespace connect_4_core
                 {
                     break;
                 }
-                if (board.GetPlayer(new Location(col - i, board.FindTopRow(col))) != player)
+                if (board.GetPlayer(new Location(col - i, row)) != player)
                 {
                     break;
                 }
@@ -58,7 +59,7 @@ namespace connect_4_core
                 {
                     break;
                 }
-                if (board.GetPlayer(new Location(col + i, board.FindTopRow(col))) != player)
+                if (board.GetPlayer(new Location(col + i, row)) != player)
                 {
                     break;
                 }
@@ -69,14 +70,89 @@ namespace connect_4_core
             return counter == 4;
         }
 
-        private bool CheckTopLeftBotRightWin(IBoard board, uint col)
+        public bool CheckTopLeftBotRightWin(IBoard board, uint col, uint player)
         {
-            return false;
+            uint counter = 1;
+            uint row = board.FindTopRow(col);
+
+            // Top left check
+            for (uint i = 1; i < 4; i++)
+            {
+                if (col - i < 0 || row - i < 0)
+                {
+                    break;
+                }
+                if (board.GetPlayer(new Location(col - i, row - i)) != player)
+                {
+                    break;
+                }
+
+                counter++;
+            }
+
+            if (counter == 4) {
+                return true;
+            }
+
+            // Bottom right check
+            for (uint i = 1; i < 4; i++)
+            {
+                if (col + i > 6 || row + i > 5)
+                {
+                    break;
+                }
+                if (board.GetPlayer(new Location(col + i, row + i)) != player)
+                {
+                    break;
+                }
+
+                counter++;
+            }
+
+            return counter == 4;
         }
 
-        private bool CheckBotLeftTopRightWin(IBoard board, uint col)
+        public bool CheckBotLeftTopRightWin(IBoard board, uint col, uint player)
         {
-            return false;
+            uint counter = 1;
+            uint row = board.FindTopRow(col);
+
+            // Top right check
+            for (uint i = 1; i < 4; i++)
+            {
+                if (col + i > 6 || row - i < 0)
+                {
+                    break;
+                }
+                if (board.GetPlayer(new Location(col + i, row - i)) != player)
+                {
+                    break;
+                }
+
+                counter++;
+            }
+
+            if (counter == 4)
+            {
+                return true;
+            }
+
+            // Bottom left check
+            for (uint i = 1; i < 4; i++)
+            {
+                if (col - i < 0 || row + i > 5)
+                {
+                    break;
+                }
+                if (board.GetPlayer(new Location(col - i, row + i)) != player)
+                {
+                    break;
+                }
+
+                counter++;
+            }
+
+            return counter == 4;
         }
     }
 }

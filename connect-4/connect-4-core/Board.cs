@@ -144,6 +144,7 @@ namespace connect_4_core
                     }
                 }
                 catch (Exception e) {
+                    Console.WriteLine(e);
                     if (board[initCol + i, initRow + i] == player)
                     {
                         count++;
@@ -216,7 +217,11 @@ namespace connect_4_core
                 var col = item[0];
                 board[col, row] = 1;
             });
+        }
 
+        public void Set(uint col, uint row, uint player)
+        {
+            board[col, row] = player;
         }
 
         public uint?[,] GetBoard()
