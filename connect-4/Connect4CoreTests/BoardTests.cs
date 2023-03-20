@@ -51,9 +51,8 @@ namespace connect_4_core.Tests
                 b.DropPiece(2, 1);
                 // Should never get here
                 Assert.Fail();
-            } catch (Exception ex)
-            {
-                
+            } catch (Exception)
+            {                                
             }
         }
 

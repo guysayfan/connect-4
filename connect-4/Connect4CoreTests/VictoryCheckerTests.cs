@@ -16,17 +16,17 @@ namespace connect_4_core.Tests
             b = new Board();
         }
 
-        //[TestMethod()]
-        //public void CheckVerticalWin_Test()
-        //{
-        //    b.Set(0, 2, 0);
-        //    b.Set(0, 3, 0);
-        //    b.Set(0, 4, 0);
-        //    b.Set(0, 5, 0);
+        [TestMethod()]
+        public void CheckVerticalWin_Test()
+        {
+            b.Set(0, 2, 0);
+            b.Set(0, 3, 0);
+            b.Set(0, 4, 0);
+            b.Set(0, 5, 0);
 
-        //    var result = v.CheckVerticalWin(b, 0, 0);
-        //    Assert.IsTrue(result);
-        //}
+            var result = v.CheckVerticalWin(b, 0, 0);
+            Assert.IsTrue(result);
+        }
 
         [TestMethod()]
         public void CheckVerticalWinTWO_Test()

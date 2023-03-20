@@ -31,7 +31,7 @@ namespace connect_4_core
         public bool CheckHorizontalWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
-            uint row = board.FindTopRow(col);
+            uint row = board.FindTopRow(col) + 1;
 
             // Left check
             for (uint i = 1; i < 4; i++)
@@ -73,7 +73,7 @@ namespace connect_4_core
         public bool CheckTopLeftBotRightWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
-            uint row = board.FindTopRow(col);
+            uint row = board.FindTopRow(col) + 1;
 
             // Top left check
             for (uint i = 1; i < 4; i++)
@@ -115,7 +115,7 @@ namespace connect_4_core
         public bool CheckBotLeftTopRightWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
-            uint row = board.FindTopRow(col);
+            uint row = board.FindTopRow(col) + 1;
 
             // Top right check
             for (uint i = 1; i < 4; i++)
