@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace connect_4
 {
-    public class NormalAIPlayer
+    public class NormalAIPlayer : IPlayer
     {
         uint player;
         public NormalAIPlayer(uint player)
@@ -22,12 +22,18 @@ namespace connect_4
         public uint Play(IBoard board)
         {
             Thread.Sleep(1000);
-            int col = rnd.Next(7);
-            while (board.IsColFull((uint)col))
-            {
-                col = rnd.Next(7);
+            var cols = FindWinningCols(board);
+            
+            if (cols.Count > 0) {
+                return cols.First();
             }
-            return (uint)col;
+
+            uint col = (uint)rnd.Next(7);
+            while (board.IsColFull(col))
+            {
+                col = (uint)rnd.Next(7);
+            }
+            return col;
         }
 
         private HashSet<uint> FindWinningCols(IBoard board)
@@ -36,6 +42,14 @@ namespace connect_4
             for (uint i = 0; i < 7; i++)
             {
                 //check if column is full
+                if (board.IsColFull(i)) {
+                    continue;
+                }
+
+                //clone board and drop piece in current col
+                var b = new Board(board);
+                b.DropPiece(i, player);
+
                 //if top row is replaced with ai piece checks if the ai will win
                 if (victoryChecker.CheckVerticalWin(board, i, player))
                 {

@@ -11,6 +11,16 @@ namespace connect_4_core
 
         uint?[,] board = new uint?[7, 6];
 
+        public Board()
+        {
+        }
+
+        public Board(IBoard b)
+        {
+            Board bb = (Board)b;
+            board = bb.board;
+        }
+
         public uint DropPiece(uint col, uint player)
         {
             var topRow = FindTopRow(col);
@@ -117,54 +127,5 @@ namespace connect_4_core
         {
             return board;
         }
-
-        public IBoard Clone()
-        {
-            return (IBoard)this.MemberwiseClone();
-        }
-
-        //static bool hasPlayerRow(int step, int player)
-        //{
-
-        //}
-
-        //private bool GenericCheck(Predicate<KeyValuePair <int, int>> p, int player, int steps)
-        //{
-        //    var count = 0;
-        //    for (int i = 0; i < steps; i++)
-        //    {
-        //        var pair = new KeyValuePair<int, int>(i, player);
-        //        if (p(pair))
-        //        {
-        //            count++;
-        //            if (count == 4)
-        //            {
-        //                return true;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            count = 0;
-        //        }
-        //    }
-        //    return false;
-        //}
     }
 }
-
-/************************
-
-0, 0 : 1
-0, 1 : 2
-0, 2 : 3
-0, 3 : 4
-0, 4 : 5
-0, 5 : 6
-1, 5 : 6
-2, 5 : 5
-3, 5 : 4
-4, 5 : 3
-5, 5 : 2
-6, 5 : 1
-
-*/

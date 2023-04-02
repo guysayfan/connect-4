@@ -35,7 +35,7 @@ namespace connect_4_core
 
         public IBoard GetBoard()
         {
-            return board.Clone();
+            return new Board(board);
         }
 
 

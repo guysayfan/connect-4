@@ -12,14 +12,13 @@ namespace connect_4_core
     {
         public bool CheckVerticalWin(IBoard board, uint col, uint player)
         {
-            uint topRow = board.FindTopRow(col);
-
-            if (topRow > 2)
+            var row = board.FindTopRow(col) + 1;
+            if (row > 2)
             {
                 return false;
             }
 
-            for (uint i = topRow + 1; i < 4 + topRow; i++)
+            for (uint i = row + 1; i < 4 + row; i++)
             {
                 if (board.GetPlayer(new Location(col, i)) != player) {
                     return false;
@@ -31,7 +30,10 @@ namespace connect_4_core
         public bool CheckHorizontalWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
-            uint row = board.FindTopRow(col) + 1;
+            var row = board.FindTopRow(col) + 1;
+            if (row > 5) {
+                return false;
+            }
 
             // Left check
             for (uint i = 1; i < 4; i++)
@@ -48,7 +50,7 @@ namespace connect_4_core
                 counter++;
             }
 
-            if (counter == 4) {
+            if (counter >= 4) {
                 return true;
             }
 
@@ -67,14 +69,13 @@ namespace connect_4_core
                 counter++;
             }
 
-            return counter == 4;
+            return counter >= 4;
         }
 
         public bool CheckTopLeftBotRightWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
-            var row = getTopRow(board, col);
-
+            var row = board.FindTopRow(col) + 1;
             // Top left check
             for (uint i = 1; i < 4; i++)
             {
@@ -90,7 +91,7 @@ namespace connect_4_core
                 counter++;
             }
 
-            if (counter == 4) {
+            if (counter >= 4) {
                 return true;
             }
 
@@ -109,19 +110,13 @@ namespace connect_4_core
                 counter++;
             }
 
-            return counter == 4;
-        }
-
-        private uint getTopRow(IBoard board, uint col)
-        {
-            uint row = board.FindTopRow(col) + 1;
-            return row > 5 ? 0 : row;
+            return counter >= 4;
         }
 
         public bool CheckBotLeftTopRightWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
-            var row = getTopRow(board, col);
+            var row = board.FindTopRow(col) + 1;
 
             // Top right check
             for (uint i = 1; i < 4; i++)
@@ -138,7 +133,7 @@ namespace connect_4_core
                 counter++;
             }
 
-            if (counter == 4)
+            if (counter >= 4)
             {
                 return true;
             }
@@ -158,7 +153,7 @@ namespace connect_4_core
                 counter++;
             }
 
-            return counter == 4;
+            return counter >= 4;
         }
     }
 }

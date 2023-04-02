@@ -43,10 +43,10 @@ namespace connect_4_core.Tests
         [TestMethod()]
         public void CheckHorizontalWin_Test()
         {
-            b.Set(0, 5, 0);
             b.Set(1, 5, 0);
             b.Set(2, 5, 0);
             b.Set(3, 5, 0);
+            b.Set(4, 5, 0);
 
             var result = v.CheckHorizontalWin(b, 3, 0);
             Assert.IsTrue(result);
