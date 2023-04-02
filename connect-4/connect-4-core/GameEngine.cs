@@ -44,7 +44,7 @@ namespace connect_4_core
             IPlayer[] players = {p1, p2};
 
             Location location = new Location(0, 0);
-            while (!IsGameOver(location)) {
+            while (!IsGameOver(location.Col)) {
                 activePlayer = activePlayer == 0U ? 1U : 0U;
                 location.Col = players[activePlayer].Play(GetBoard());
                 location.Row = board.DropPiece(location.Col, activePlayer);
@@ -89,7 +89,7 @@ namespace connect_4_core
             return initials;
         }
 
-        private bool IsGameOver(Location location)
+        private bool IsGameOver(uint col)
         {
             int counter = 0;
             for (uint i = 0; i < 7; i++)
@@ -100,22 +100,19 @@ namespace connect_4_core
                 }
             }
 
-            Location initialsTopLeft = GetTopLeftBotRightInit(location);
-            Location initialsBotLeft = GetBotLeftTopRightInit(location);
-
-            if (board.CheckRowWin(location.Row, activePlayer))
+            if (board.CheckRowWin(col, activePlayer))
             {
                 winner = activePlayer;
                 return true;
-            } else if (board.CheckColWin(location.Col, activePlayer))
+            } else if (board.CheckColWin(col, activePlayer))
             {
                 winner = activePlayer;
                 return true;
-            } else if (board.CheckTopLeftBotRightWin(initialsTopLeft, activePlayer))
+            } else if (board.CheckTopLeftBotRightWin(col, activePlayer))
             {
                 winner = activePlayer;
                 return true;
-            } else if (board.CheckBotLeftTopRightWin(initialsBotLeft, location, activePlayer))
+            } else if (board.CheckBotLeftTopRightWin(col, activePlayer))
             {
                 winner = activePlayer;
                 return true;

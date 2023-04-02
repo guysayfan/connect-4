@@ -4,6 +4,9 @@ namespace connect_4_core
 {
     public class Board : IBoard
     {
+        VictoryChecker victoryChecker = new VictoryChecker();
+
+
         const int INVALID_ROW = 999;
 
         uint?[,] board = new uint?[7, 6];
@@ -63,144 +66,26 @@ namespace connect_4_core
             return i - 1;
         }
 
-        public bool CheckRowWin(uint row, uint player)
+        public bool CheckRowWin(uint col, uint player)
         {
-            var count = 0;
-            for (int col = 0; col < 7; col++)
-            {
-                if (board[col, row] == player)
-                {
-                    count++;
-                    if (count == 4)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    count = 0;
-                }
-            }
-            return false;
+            return victoryChecker.CheckHorizontalWin(this, col, player);
         }
 
         public bool CheckColWin(uint col, uint player)
         {
-            var count = 0;
-            for (int row = 0; row < 6; row++)
-            {
-                if (board[col, row] == player)
-                {
-                    count++;
-                    if (count == 4)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    count = 0;
-                }
-            }
-            return false;
+            return victoryChecker.CheckVerticalWin(this, col, player);
         }
 
-        public uint CalcTopLeftBotRightSteps(Location location)
+        public bool CheckTopLeftBotRightWin(uint col, uint player)
         {
-            uint steps = 0;
-            if (location.Col <= location.Row)
-            {
-                steps = 6 - location.Row;
-            } else
-            {
-                steps = 7 - location.Col;
-            }
+            return victoryChecker.CheckTopLeftBotRightWin(this, col, player);
 
-            return steps;
         }
 
-        public bool CheckTopLeftBotRightWin(Location location, uint player)
+        public bool CheckBotLeftTopRightWin(uint col, uint player)
         {
-            var initCol = location.Col;
-            var initRow = location.Row;
+            return victoryChecker.CheckBotLeftTopRightWin(this, col, player);
 
-            if (initCol > 3 || initRow > 3)
-            {
-                return false;
-            }
-            var count = 0;
-            var steps = initRow == 0 ? 6 - initCol : 6 - initRow;
-            for (int i = 0; i < steps; i++)
-            {
-                try
-                {
-                    if (board[initCol + i, initRow + i] == player)
-                    {
-                        count++;
-                        if (count == 4)
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        count = 0;
-                    }
-                }
-                catch (Exception e) {
-                    Console.WriteLine(e);
-                    if (board[initCol + i, initRow + i] == player)
-                    {
-                        count++;
-                        if (count == 4)
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        count = 0;
-                    }
-                }
-            }
-            return false;
-        }
-
-        public bool CheckBotLeftTopRightWin(Location initLocation, Location clickLocation, uint player)
-        {
-            var initCol = initLocation.Col;
-            var initRow = initLocation.Row;
-
-            if ((clickLocation.Row + clickLocation.Col < 3) || (clickLocation.Row + clickLocation.Col > 8))
-            {
-                return false;
-            }
-
-            var count = 0;
-            var steps = initCol == 0 ? initRow + 1 : 7 - initCol;
-
-            if (initRow != 5 && initCol != 0) {
-                throw new Exception("initRow must equal 5 or initCol must equal 0");
-            }
-
-            for (int i = 0; i < steps; i++)
-            {
-                var row = initRow - i;
-                var col = initCol + i;
-                if (board[col, row] == player)
-                {
-                    count++;
-                    if (count == 4)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    count = 0;
-                }
-            }
-            return false;
         }
 
         /// <summary>

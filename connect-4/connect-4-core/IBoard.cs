@@ -22,8 +22,8 @@ namespace connect_4_core
 
         bool CheckColWin(uint col, uint player);
 
-        bool CheckTopLeftBotRightWin(Location location, uint player);
+        bool CheckTopLeftBotRightWin(uint col, uint player);
 
-        bool CheckBotLeftTopRightWin(Location initLocation, Location clickLocation, uint player);
+        bool CheckBotLeftTopRightWin(uint col, uint player);
     }
 }

@@ -36,7 +36,7 @@ namespace connect_4_core
             // Left check
             for (uint i = 1; i < 4; i++)
             {
-                if (col - i < 0)
+                if (col < i)
                 {
                     break;
                 }
@@ -73,12 +73,12 @@ namespace connect_4_core
         public bool CheckTopLeftBotRightWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
-            uint row = board.FindTopRow(col) + 1;
+            var row = getTopRow(board, col);
 
             // Top left check
             for (uint i = 1; i < 4; i++)
             {
-                if (col - i < 0 || row - i < 0)
+                if (col < i || row < i)
                 {
                     break;
                 }
@@ -112,15 +112,21 @@ namespace connect_4_core
             return counter == 4;
         }
 
+        private uint getTopRow(IBoard board, uint col)
+        {
+            uint row = board.FindTopRow(col) + 1;
+            return row > 5 ? 0 : row;
+        }
+
         public bool CheckBotLeftTopRightWin(IBoard board, uint col, uint player)
         {
             uint counter = 1;
-            uint row = board.FindTopRow(col) + 1;
+            var row = getTopRow(board, col);
 
             // Top right check
             for (uint i = 1; i < 4; i++)
             {
-                if (col + i > 6 || row - i < 0)
+                if (col + i > 6 || row < i)
                 {
                     break;
                 }
@@ -140,7 +146,7 @@ namespace connect_4_core
             // Bottom left check
             for (uint i = 1; i < 4; i++)
             {
-                if (col - i < 0 || row + i > 5)
+                if (col < i || row + i > 5)
                 {
                     break;
                 }

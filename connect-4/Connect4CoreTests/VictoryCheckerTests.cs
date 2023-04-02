@@ -53,7 +53,7 @@ namespace connect_4_core.Tests
 
             b.Set(2, 5, 1);
 
-            result = v.CheckVerticalWin(b, 3, 0);
+            result = v.CheckHorizontalWin(b, 3, 0);
             Assert.IsFalse(result);
         }
 

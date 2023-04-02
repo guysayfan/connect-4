@@ -59,7 +59,7 @@ namespace connect_4_core.Tests
         [TestMethod()]
         public void CheckWinTopLeftBottomRight_Test()
         {
-            var win = b.CheckTopLeftBotRightWin(loc02, 0);
+            var win = b.CheckTopLeftBotRightWin(loc02.Col, 0);
             Assert.IsFalse(win);
             // 
 
@@ -72,32 +72,32 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckTopLeftBotRightWin(loc00, 0);
+            win = b.CheckTopLeftBotRightWin(loc00.Col, 0);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 2, 2 });
             b.Populate(p1List, p2List);
-            win = b.CheckTopLeftBotRightWin(loc00, 0);
+            win = b.CheckTopLeftBotRightWin(loc00.Col, 0);
             Assert.IsFalse(win);
         }
 
         [TestMethod()]
         public void CheckWinBottomLeftTopRight_Test()
         {
-            var win = b.CheckBotLeftTopRightWin(loc15, loc60, 0);
+            var win = b.CheckBotLeftTopRightWin(loc15.Col, 0);
             Assert.IsFalse(win);
             // 
 
             List<int[]> p1List = new List<int[]>();
-            p1List.Add(new int[] { 6, 0 });
-            p1List.Add(new int[] { 5, 1 });
-            p1List.Add(new int[] { 4, 2 });
-            p1List.Add(new int[] { 3, 3 });
+            p1List.Add(new int[] { 0, 5 });
+            p1List.Add(new int[] { 1, 4 });
+            p1List.Add(new int[] { 2, 3 });
+            p1List.Add(new int[] { 3, 2 });
 
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckBotLeftTopRightWin(loc15, loc60, 0);
+            win = b.CheckBotLeftTopRightWin(1, 0);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 4, 2 });
@@ -111,7 +111,7 @@ namespace connect_4_core.Tests
             p1List.Add(new int[] { 3, 2 });
 
             b.Populate(p1List, p2List);
-            win = b.CheckBotLeftTopRightWin(loc05, loc32, 0);
+            win = b.CheckBotLeftTopRightWin(loc05.Col, 0);
             Assert.IsTrue(win);
 
 
