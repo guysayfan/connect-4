@@ -35,7 +35,7 @@ namespace connect_4_core
 
         public IBoard GetBoard()
         {
-            return new Board(board);
+            return board;
         }
 
 

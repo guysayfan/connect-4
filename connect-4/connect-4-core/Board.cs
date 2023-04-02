@@ -18,7 +18,14 @@ namespace connect_4_core
         public Board(IBoard b)
         {
             Board bb = (Board)b;
-            board = bb.board;
+
+            for (uint col = 0; col < 6; col++)
+            {
+                for (int row = 0; row < 6; row++) 
+                {
+                    board[col, row] = bb.board[col, row];
+                }
+            }            
         }
 
         public uint DropPiece(uint col, uint player)
@@ -52,12 +59,7 @@ namespace connect_4_core
             return board[location.Col, location.Row];
         }
 
-        //public bool CheckVictory(int player, int lastPieceRow, int lastPieceCol)
-        //{
-
-        //}
-
-        // Finds next available row to place piece
+    
 
         public uint FindTopRow(uint col)
         {
@@ -123,9 +125,5 @@ namespace connect_4_core
             board[col, row] = player;
         }
 
-        public uint?[,] GetBoard()
-        {
-            return board;
-        }
     }
 }

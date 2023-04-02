@@ -55,15 +55,15 @@ namespace connect_4
                 {
                     cols.Add(i);
                 }
-                else if (victoryChecker.CheckHorizontalWin(board, i, player))
+                else if (victoryChecker.CheckHorizontalWin(b, i, player))
                 {
                     cols.Add(i);
                 }
-                else if (victoryChecker.CheckTopLeftBotRightWin(board, i, player))
+                else if (victoryChecker.CheckTopLeftBotRightWin(b, i, player))
                 {
                     cols.Add(i);
                 }
-                else if (victoryChecker.CheckBotLeftTopRightWin(board, i, player))
+                else if (victoryChecker.CheckBotLeftTopRightWin(b, i, player))
                 {
                     cols.Add(i);
                 }

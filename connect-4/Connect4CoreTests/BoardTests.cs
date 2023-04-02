@@ -59,7 +59,7 @@ namespace connect_4_core.Tests
         [TestMethod()]
         public void CheckWinTopLeftBottomRight_Test()
         {
-            var win = b.CheckTopLeftBotRightWin(loc02.Col, 0);
+            var win = b.CheckTopLeftBotRightWin(0, 0);
             Assert.IsFalse(win);
             // 
 
@@ -72,7 +72,7 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckTopLeftBotRightWin(loc00.Col, 0);
+            win = b.CheckTopLeftBotRightWin(0, 0);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 2, 2 });
