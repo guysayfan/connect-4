@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\connect-4-core\Connect4Core.csproj" />
+    <ProjectReference Include="..\Connect4AI\Connect4AI.csproj" />
   </ItemGroup>
 
 </Project>

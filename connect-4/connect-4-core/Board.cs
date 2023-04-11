@@ -19,7 +19,7 @@ namespace connect_4_core
         {
             Board bb = (Board)b;
 
-            for (uint col = 0; col < 6; col++)
+            for (uint col = 0; col < 7; col++)
             {
                 for (int row = 0; row < 6; row++) 
                 {

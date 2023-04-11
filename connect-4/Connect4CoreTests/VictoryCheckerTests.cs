@@ -26,6 +26,14 @@ namespace connect_4_core.Tests
 
             var result = v.CheckVerticalWin(b, 0, 0);
             Assert.IsTrue(result);
+
+            b.Set(1, 2, 0);
+            b.Set(1, 3, 0);
+            b.Set(1, 4, 0);
+            b.Set(1, 5, 0);
+
+            result = v.CheckVerticalWin(b, 1, 0);
+            Assert.IsTrue(result);
         }
 
         [TestMethod()]

@@ -10,10 +10,12 @@ namespace connect_4
 {
     public class NormalAIPlayer : IPlayer
     {
-        uint player;
-        public NormalAIPlayer(uint player)
+        uint aiPlayer;
+        uint human;
+        public NormalAIPlayer(uint player, uint human)
         {
-            this.player = player;
+            aiPlayer = player;
+            this.human = human;
         }
 
         VictoryChecker victoryChecker = new VictoryChecker();
@@ -22,9 +24,17 @@ namespace connect_4
         public uint Play(IBoard board)
         {
             Thread.Sleep(1000);
-            var cols = FindWinningCols(board);
-            
+
+            // Check if AI wins
+            var cols = FindWinningCols(board, aiPlayer);
             if (cols.Count > 0) {
+                return cols.First();
+            }
+
+            // Check if human wins
+            cols = FindWinningCols(board, human);
+            if (cols.Count > 0)
+            {
                 return cols.First();
             }
 
@@ -36,7 +46,7 @@ namespace connect_4
             return col;
         }
 
-        private HashSet<uint> FindWinningCols(IBoard board)
+        private HashSet<uint> FindWinningCols(IBoard board, uint player)
         {
             var cols = new HashSet<uint>();
             for (uint i = 0; i < 7; i++)
@@ -51,7 +61,7 @@ namespace connect_4
                 b.DropPiece(i, player);
 
                 //if top row is replaced with ai piece checks if the ai will win
-                if (victoryChecker.CheckVerticalWin(board, i, player))
+                if (victoryChecker.CheckVerticalWin(b, i, player))
                 {
                     cols.Add(i);
                 }
