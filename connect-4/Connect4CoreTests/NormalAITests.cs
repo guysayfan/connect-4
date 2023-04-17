@@ -20,19 +20,21 @@ namespace connect_4_core.Tests
         [TestMethod()]
         public void Play_Test()
         {
-            //b.Set(4, 2, 0);
-            //b.Set(4, 3, 0);
-            //b.Set(4, 4, 0);
-            //b.Set(4, 5, 0);
+            b.Set(4, 2, 0);
+            b.Set(4, 3, 0);
+            b.Set(4, 4, 0);
+            b.Set(4, 5, 0);
 
-            //var result = n.Play(b);
-            //Assert.AreEqual(result, (uint)4);
+            var result = n.Play(b);
+            Assert.AreEqual(result, (uint)4);
+
+            b = new Board();
 
             b.Set(6, 3, 0);
             b.Set(6, 4, 0);
             b.Set(6, 5, 0);
 
-            var result = n.Play(b);
+            result = n.Play(b);
             Assert.AreEqual(result, (uint)6);
         }
     }
