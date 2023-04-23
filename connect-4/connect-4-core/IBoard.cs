@@ -18,12 +18,8 @@ namespace connect_4_core
 
         uint FindTopRow(uint col);
 
-        bool CheckRowWin(uint row, uint player);
+        bool CheckWin(uint row, uint player);
 
-        bool CheckColWin(uint col, uint player);
-
-        bool CheckTopLeftBotRightWin(uint col, uint player);
-
-        bool CheckBotLeftTopRightWin(uint col, uint player);
+        HashSet<uint> FindAvailableCols();
     }
 }

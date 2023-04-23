@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace connect_4
 {
-    public class NormalAIPlayer : IPlayer
+    public class SuperAIPlayer : IPlayer
     {
         uint aiPlayer;
         uint human;
-        public NormalAIPlayer(uint player, uint human)
+        uint lookAhead;
+        public SuperAIPlayer(uint player, uint human, uint lookAhead)
         {
             aiPlayer = player;
             this.human = human;
+            this.lookAhead = lookAhead;
         }
 
         VictoryChecker victoryChecker = new VictoryChecker();
@@ -38,12 +40,32 @@ namespace connect_4
                 return cols.First();
             }
 
-            uint col = (uint)rnd.Next(7);
-            while (board.IsColFull(col))
+            var pCols = FindPotentialCols(board);
+
+            uint index = (uint)rnd.Next(pCols.Length);
+            return pCols[index];
+        }
+
+
+        private uint[] FindPotentialCols(IBoard board)
+        {
+            var cols = new HashSet<uint>();
+
+
+
+            return cols.ToArray();
+        }
+
+        // Finds columns that lead to a sure victory for AI player or human player on their next turn
+        private Dictionary<uint, IBoard> CheckBoards(HashSet<IBoard> boards, uint player)
+        {
+            var result = new Dictionary<uint, IBoard>();
+            foreach(IBoard b in boards)
             {
-                col = (uint)rnd.Next(7);
+                var cols = FindWinningCols(b, player);
             }
-            return col;
+
+            return result;
         }
 
         private HashSet<uint> FindWinningCols(IBoard board, uint player)

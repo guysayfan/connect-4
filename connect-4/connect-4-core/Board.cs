@@ -78,26 +78,9 @@ namespace connect_4_core
             return i - 1;
         }
 
-        public bool CheckRowWin(uint col, uint player)
+        public bool CheckWin(uint col, uint player)
         {
-            return victoryChecker.CheckHorizontalWin(this, col, player);
-        }
-
-        public bool CheckColWin(uint col, uint player)
-        {
-            return victoryChecker.CheckVerticalWin(this, col, player);
-        }
-
-        public bool CheckTopLeftBotRightWin(uint col, uint player)
-        {
-            return victoryChecker.CheckTopLeftBotRightWin(this, col, player);
-
-        }
-
-        public bool CheckBotLeftTopRightWin(uint col, uint player)
-        {
-            return victoryChecker.CheckBotLeftTopRightWin(this, col, player);
-
+            return victoryChecker.CheckVictory(this, col, player);
         }
 
         /// <summary>
@@ -125,5 +108,20 @@ namespace connect_4_core
             board[col, row] = player;
         }
 
+
+        public HashSet<uint> FindAvailableCols()
+        {
+            var cols = new HashSet<uint>();
+
+            for (uint i = 0; i < 7; i++)
+            {
+                if (!IsColFull(i))
+                {
+                    cols.Add(i);
+                }
+            }
+
+            return cols;
+        }
     }
 }
