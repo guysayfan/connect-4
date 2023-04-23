@@ -100,19 +100,7 @@ namespace connect_4_core
                 }
             }
 
-            if (board.CheckRowWin(col, activePlayer))
-            {
-                winner = activePlayer;
-                return true;
-            } else if (board.CheckColWin(col, activePlayer))
-            {
-                winner = activePlayer;
-                return true;
-            } else if (board.CheckTopLeftBotRightWin(col, activePlayer))
-            {
-                winner = activePlayer;
-                return true;
-            } else if (board.CheckBotLeftTopRightWin(col, activePlayer))
+            if (board.CheckWin(col, activePlayer))
             {
                 winner = activePlayer;
                 return true;

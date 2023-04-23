@@ -61,19 +61,7 @@ namespace connect_4
                 b.DropPiece(i, player);
 
                 //if top row is replaced with ai piece checks if the ai will win
-                if (victoryChecker.CheckVerticalWin(b, i, player))
-                {
-                    cols.Add(i);
-                }
-                else if (victoryChecker.CheckHorizontalWin(b, i, player))
-                {
-                    cols.Add(i);
-                }
-                else if (victoryChecker.CheckTopLeftBotRightWin(b, i, player))
-                {
-                    cols.Add(i);
-                }
-                else if (victoryChecker.CheckBotLeftTopRightWin(b, i, player))
+                if (victoryChecker.CheckVictory(b, i, player))
                 {
                     cols.Add(i);
                 }

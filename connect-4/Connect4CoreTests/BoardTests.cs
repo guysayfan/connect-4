@@ -59,7 +59,7 @@ namespace connect_4_core.Tests
         [TestMethod()]
         public void CheckWinTopLeftBottomRight_Test()
         {
-            var win = b.CheckTopLeftBotRightWin(0, 0);
+            var win = b.CheckWin(0, 0);
             Assert.IsFalse(win);
             // 
 
@@ -72,19 +72,19 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckTopLeftBotRightWin(0, 0);
+            win = b.CheckWin(0, 0);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 2, 2 });
             b.Populate(p1List, p2List);
-            win = b.CheckTopLeftBotRightWin(loc00.Col, 0);
+            win = b.CheckWin(loc00.Col, 0);
             Assert.IsFalse(win);
         }
 
         [TestMethod()]
         public void CheckWinBottomLeftTopRight_Test()
         {
-            var win = b.CheckBotLeftTopRightWin(loc15.Col, 0);
+            var win = b.CheckWin(loc15.Col, 0);
             Assert.IsFalse(win);
             // 
 
@@ -97,7 +97,7 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckBotLeftTopRightWin(1, 0);
+            win = b.CheckWin(1, 0);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 4, 2 });
@@ -111,7 +111,7 @@ namespace connect_4_core.Tests
             p1List.Add(new int[] { 3, 2 });
 
             b.Populate(p1List, p2List);
-            win = b.CheckBotLeftTopRightWin(loc05.Col, 0);
+            win = b.CheckWin(loc05.Col, 0);
             Assert.IsTrue(win);
 
 
