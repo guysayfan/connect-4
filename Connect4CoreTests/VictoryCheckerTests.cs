@@ -37,7 +37,7 @@ namespace connect_4_core.Tests
         }
 
         [TestMethod()]
-        public void CheckVerticalWinTWO_Test()
+        public void CheckVerticalWin2_Test()
         {
             b.Set(0, 2, 0);
             b.Set(0, 3, 1);
@@ -47,6 +47,18 @@ namespace connect_4_core.Tests
             var result = v.CheckVictory(b, 0, 0);
             Assert.IsFalse(result);
         }
+
+        [TestMethod()]
+        public void CheckVerticalWin3_Test()
+        {
+            b.Set(2, 1, 0);
+            b.Set(2, 2, 0);
+            b.Set(2, 3, 0);
+
+            var result = v.CheckVictory(b, 2, 0);
+            Assert.IsTrue(result);
+        }
+
 
         [TestMethod()]
         public void CheckHorizontalWin_Test()

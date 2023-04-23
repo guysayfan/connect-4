@@ -24,7 +24,7 @@ namespace connect_4_core
                 return false;
             }
 
-            for (uint i = row + 1; i < 4 + row; i++)
+            for (uint i = row; i < row + 3; i++)
             {
                 if (board.GetPlayer(new Location(col, i)) != player) {
                     return false;
