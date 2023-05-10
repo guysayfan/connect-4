@@ -123,5 +123,21 @@ namespace connect_4_core
 
             return cols;
         }
+
+        public uint CountPieces()
+        {
+            uint counter = 0;
+            for (uint i = 0; i < 6; i++)
+            {
+                for (uint j = 0; j < 7; j++)
+                {
+                    if (board[j, i] != null)
+                    {
+                        counter++;
+                    }
+                }
+            }
+            return counter;
+        }
     }
 }
