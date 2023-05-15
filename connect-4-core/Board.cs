@@ -108,6 +108,10 @@ namespace connect_4_core
             board[col, row] = player;
         }
 
+        public uint? Get(uint col, uint row)
+        {
+            return board[col, row];
+        }
 
         public HashSet<uint> FindAvailableCols()
         {

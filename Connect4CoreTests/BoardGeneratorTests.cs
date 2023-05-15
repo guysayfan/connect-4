@@ -32,6 +32,35 @@ namespace connect_4_core.Tests
             var board = (Board)bg.BuildBoard(input);
             
             Assert.IsTrue(board.CountPieces() == 0);
+
+            input = $@"
+            .......
+            .......
+            .......
+            .......
+            .o.....
+            .x..x..";
+
+            board = (Board)bg.BuildBoard(input);
+
+            Assert.IsTrue(board.CountPieces() == 3);
+        }
+
+        [TestMethod()]
+        public void DisplayBoard_Test()
+        {
+            var b = $@"
+            .......
+            .......
+            .......
+            .......
+            .o.....
+            .x..x..";
+            var bb = bg.BuildBoard(b);
+
+            var result = bg.DisplayBoard(bb);
+            var unindented = bg.UnindentString(b);
+            Assert.AreEqual(unindented, result);
         }
 
         [TestMethod()]
