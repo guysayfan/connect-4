@@ -2,7 +2,8 @@
 using Connect4AI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection.Metadata;
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace connect_4_core.Tests
 {
@@ -84,7 +85,7 @@ namespace connect_4_core.Tests
                 var index = (uint)e.index;
                 var board = e.Key;
                 var seq = e.Value;
-                var expectedSeq = new HashSet<List<uint>> { new List<uint> { 0 } };
+                var expectedSeq = JsonSerializer.Serialize(new HashSet<List<uint>> { new List<uint> { 0 } });
 
                 // Verify board
                 for (uint col = 0; col < 7; col++)
@@ -105,7 +106,8 @@ namespace connect_4_core.Tests
                 }
 
                 // Verify play sequences
-                Assert.IsTrue(Enumerable.SequenceEqual(seq, expectedSeq));
+                var actualSeq = JsonSerializer.Serialize(seq)
+;                Assert.AreEqual(expectedSeq, actualSeq);
             }
         }
     }

@@ -142,7 +142,7 @@ namespace Connect4AI
                 b.DropPiece(i, player);
                 foreach (var seq in cloneSequences)
                 {
-                    seq.Add(i);
+                    seq.Add(player);
                 }
                 boards.Add(b, cloneSequences);
             }
