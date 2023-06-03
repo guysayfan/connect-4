@@ -11,7 +11,7 @@ namespace Connect4AI
 {
     public class BoardGenerator
     {
-        public BoardDict GenerateBoards(IBoard initBoard, uint lookAhead, uint player)
+        public BoardDict GenerateAllBoards(IBoard initBoard, uint lookAhead, uint player)
         {
             var boards = new BoardDict();
 
@@ -121,24 +121,30 @@ namespace Connect4AI
             return result.ToString();
         }
 
-        private BoardDict generateBoards(IBoard board, uint player, HashSet<List<uint>> playSequences)
+        public BoardDict GenerateBoards(IBoard board, uint player, HashSet<List<uint>> playSequences)
         {
             var boards = new BoardDict();
 
             for (uint i = 0; i < 7; i++)
             {
-                var b = new Board(board);
-                if (!b.IsColFull(i))
+                if (board.IsColFull(i))
                 {
-                    var cloneSequences = new HashSet<List<uint>>(playSequences);
-
-                    b.DropPiece(i, player);
-                    foreach (var seq in cloneSequences)
-                    {
-                        seq.Add(i);
-                    }
-                    boards.Add(b, cloneSequences);
+                    continue;
                 }
+
+                var b = new Board(board);
+                var cloneSequences = new HashSet<List<uint>>(playSequences);
+
+                if (cloneSequences.Count == 0)
+                {
+                    cloneSequences.Add(new List<uint>());
+                }
+                b.DropPiece(i, player);
+                foreach (var seq in cloneSequences)
+                {
+                    seq.Add(i);
+                }
+                boards.Add(b, cloneSequences);
             }
 
             return boards;

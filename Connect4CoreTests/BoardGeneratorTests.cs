@@ -64,9 +64,49 @@ namespace connect_4_core.Tests
         }
 
         [TestMethod()]
-        public void GenerateBoard_Test()
+        public void GenerateBoards_Test()
         {
-            
+            var b = $@"
+            .......
+            .......
+            .......
+            .......
+            .......
+            .......";
+            var bb = bg.BuildBoard(b);
+            var pSequences = new HashSet<List<uint>>();
+            var result = bg.GenerateBoards(bb, 0, pSequences);
+
+            Assert.AreEqual(result.Count, 7);
+
+            foreach (var e in result.Select((e, index) => new {  e.Key, e.Value, index }))
+            {
+                var index = (uint)e.index;
+                var board = e.Key;
+                var seq = e.Value;
+                var expectedSeq = new HashSet<List<uint>> { new List<uint> { 0 } };
+
+                // Verify board
+                for (uint col = 0; col < 7; col++)
+                {
+                    for (uint row = 0; row < 6; row++)
+                    {
+                        var loc = new Location(col, row);
+                        var player = board.GetPlayer(loc);
+
+                        if (col == index && row == 5)
+                        {
+                            Assert.AreEqual((int)player, 0);
+                        } else
+                        {
+                            Assert.AreEqual(player, null);
+                        }
+                    }
+                }
+
+                // Verify play sequences
+                Assert.IsTrue(Enumerable.SequenceEqual(seq, expectedSeq));
+            }
         }
     }
 }
