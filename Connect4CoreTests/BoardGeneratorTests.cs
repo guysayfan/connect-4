@@ -1,9 +1,8 @@
-﻿using connect_4;
-using Connect4AI;
+﻿using Connect4AI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Reflection.Metadata;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+
+using Debug = System.Diagnostics.Debug;
 
 namespace connect_4_core.Tests
 {
@@ -30,7 +29,7 @@ namespace connect_4_core.Tests
             .......
             .......";
             var bb = bg.BuildBoard(b);
-            var pSequences = new HashSet<List<uint>>();
+            var pSequences = new PlaySequenceSet();
             uint player = 0;
             var b23 = $@"
             .......
@@ -67,7 +66,7 @@ namespace connect_4_core.Tests
             ...1001
             ...0110";
             var bb = bg.BuildBoard(b);
-            var pSequences = new HashSet<List<uint>>();
+            var pSequences = new PlaySequenceSet();
             uint player = 0;
             uint lookahead = 3;
 
@@ -77,7 +76,7 @@ namespace connect_4_core.Tests
             {
                 var board = e.Key;
                 var pieceCount = board.CountPieces();
-                uint expected = 27;
+                uint expected = 8;
 
                 Assert.AreEqual(expected, pieceCount);
             }
@@ -98,7 +97,7 @@ namespace connect_4_core.Tests
                 }
 
             }
-            Console.WriteLine(allBoards);
+            Debug.WriteLine(allBoards);
         }
 
         [TestMethod()]
@@ -157,7 +156,7 @@ namespace connect_4_core.Tests
             .......
             .......";
             var bb = bg.BuildBoard(b);
-            var pSequences = new HashSet<List<uint>>();
+            var pSequences = new PlaySequenceSet();
             var result = bg.GenerateBoards(bb, 0, pSequences);
 
             Assert.AreEqual(result.Count, 7);

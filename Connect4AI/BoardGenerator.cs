@@ -1,20 +1,17 @@
 ﻿using connect_4_core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-using BoardDict = System.Collections.Generic.Dictionary<connect_4_core.IBoard, System.Collections.Generic.HashSet<System.Collections.Generic.List<uint>>>;
+using BoardDict = System.Collections.Generic.Dictionary<connect_4_core.IBoard, Connect4AI.PlaySequenceSet>;
+using Debug = System.Diagnostics.Debug;
 
 namespace Connect4AI
 {
     public class BoardGenerator
     {
-        public BoardDict GenerateAllBoards(IBoard initBoard, HashSet<List<uint>> playSeq, uint lookAhead, uint player)
+        public BoardDict GenerateAllBoards(IBoard initBoard, PlaySequenceSet pss, uint lookAhead, uint player)
         {
             var boards = new BoardDict();
-            boards[initBoard] = playSeq;
+            boards[initBoard] = pss;
 
             for (uint i = 0; i < lookAhead; i++)
             {
@@ -30,15 +27,17 @@ namespace Connect4AI
                     foreach (var e in bd)
                     {
                         var bb = e.Key;
+                        var sq = e.Value;
 
                         if (newBoards.ContainsKey(bb))
                         {
-                            newBoards[bb].Union(e.Value);
+                            newBoards[bb].Merge(sq);
                         }
                         else
                         {
-                            newBoards[bb] = e.Value;
+                            newBoards[bb] = sq;
                         }
+                        Debug.WriteLine(sq);
                     }
 
                     boards = newBoards;
@@ -146,8 +145,9 @@ namespace Connect4AI
             return result.ToString();
         }
 
-        public BoardDict GenerateBoards(IBoard board, uint player, HashSet<List<uint>> playSequences)
+        public BoardDict GenerateBoards(IBoard board, uint player, PlaySequenceSet playSequences)
         {
+            Debug.WriteLine($"original: {playSequences}");
             var boards = new BoardDict();
 
             for (uint i = 0; i < 7; i++)
@@ -158,18 +158,19 @@ namespace Connect4AI
                 }
 
                 var b = new Board(board);
-                var cloneSequences = new HashSet<List<uint>>(playSequences);
-
+                var cloneSequences = new PlaySequenceSet(playSequences);
                 if (cloneSequences.Count == 0)
                 {
-                    cloneSequences.Add(new List<uint>());
+                    cloneSequences.Add(new PlaySequence());
                 }
                 b.DropPiece(i, player);
                 foreach (var seq in cloneSequences)
                 {
+                    Debug.WriteLine($"before: {seq}");
                     seq.Add(i);
+                    Debug.WriteLine($"after: {seq}");
                 }
-                boards.Add(b, cloneSequences);
+                boards.Add(b, new PlaySequenceSet(cloneSequences));
             }
 
             return boards;
