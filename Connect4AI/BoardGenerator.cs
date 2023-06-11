@@ -11,13 +11,38 @@ namespace Connect4AI
 {
     public class BoardGenerator
     {
-        public BoardDict GenerateAllBoards(IBoard initBoard, uint lookAhead, uint player)
+        public BoardDict GenerateAllBoards(IBoard initBoard, HashSet<List<uint>> playSeq, uint lookAhead, uint player)
         {
             var boards = new BoardDict();
+            boards[initBoard] = playSeq;
 
             for (uint i = 0; i < lookAhead; i++)
             {
+                // Generate boards from each of the current boards
+                var newBoards = new BoardDict();
+                foreach (var entry in boards)
+                {
+                    var b = entry.Key;
+                    var ps = entry.Value;
+                    var p = i % 2 == 0 ? player : 1 - player;
+                    var bd = GenerateBoards(b, p, ps);
 
+                    foreach (var e in bd)
+                    {
+                        var bb = e.Key;
+
+                        if (newBoards.ContainsKey(bb))
+                        {
+                            newBoards[bb].Union(e.Value);
+                        }
+                        else
+                        {
+                            newBoards[bb] = e.Value;
+                        }
+                    }
+
+                    boards = newBoards;
+                }
             }
 
             return boards;
@@ -64,11 +89,11 @@ namespace Connect4AI
                 {
                     var c = char.ToLower(line[(int)j]);
 
-                    if (c == 'o')
+                    if (c == 'o' || c == '0')
                     {
                         newBoard.Set(j, i, 0);
                     }
-                    if (c == 'x')
+                    if (c == 'x' || c == '1')
                     {
                         newBoard.Set(j, i, 1);
                     }
@@ -142,7 +167,7 @@ namespace Connect4AI
                 b.DropPiece(i, player);
                 foreach (var seq in cloneSequences)
                 {
-                    seq.Add(player);
+                    seq.Add(i);
                 }
                 boards.Add(b, cloneSequences);
             }

@@ -21,5 +21,7 @@ namespace connect_4_core
         bool CheckWin(uint row, uint player);
 
         HashSet<uint> FindAvailableCols();
+
+        uint CountPieces();
     }
 }

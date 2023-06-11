@@ -20,6 +20,88 @@ namespace connect_4_core.Tests
         }
 
         [TestMethod()]
+        public void GenerateAllBoards_Test()
+        {
+            var b = $@"
+            .......
+            .......
+            .......
+            .......
+            .......
+            .......";
+            var bb = bg.BuildBoard(b);
+            var pSequences = new HashSet<List<uint>>();
+            uint player = 0;
+            var b23 = $@"
+            .......
+            .......
+            .......
+            .......
+            .......
+            ..10...";
+
+            var allBoards = bg.GenerateAllBoards(bb, pSequences, 2, player);
+            
+            
+            foreach (var e in allBoards)
+            {
+                var board = e.Key;
+                var pieceCount = board.CountPieces();
+                uint expected = 2;
+
+                Assert.AreEqual(expected, pieceCount);
+            }
+
+            allBoards = bg.GenerateAllBoards(bb, pSequences, 3, player);
+            Console.WriteLine(allBoards);
+        }
+
+        [TestMethod()]
+        public void GenerateAllBoardsDuplicates_Test()
+        {
+            var b = $@"
+            ...1001
+            ...0110
+            ...1001
+            ...0110
+            ...1001
+            ...0110";
+            var bb = bg.BuildBoard(b);
+            var pSequences = new HashSet<List<uint>>();
+            uint player = 0;
+            uint lookahead = 3;
+
+            var allBoards = bg.GenerateAllBoards(bb, pSequences, lookahead, player);
+
+            foreach (var e in allBoards)
+            {
+                var board = e.Key;
+                var pieceCount = board.CountPieces();
+                uint expected = 27;
+
+                Assert.AreEqual(expected, pieceCount);
+            }
+            var output = "";
+            foreach (var e in allBoards.Select((e, index) => new { e.Key, e.Value, index }))
+            {
+                var index = (uint)e.index;
+                var seqs = e.Value;
+                
+                foreach (var seq in seqs)
+                {
+                    output += $"{index.ToString()}, {seqs.Count}, sequence: ";
+                    foreach (var play in seq)
+                    {
+                        output += $"{play}, ";
+                    }
+                    output += "\n";
+                }
+
+            }
+            Console.WriteLine(allBoards);
+        }
+
+        [TestMethod()]
         public void BuildBoard_Test()
         {
             var input = $@"
@@ -85,7 +167,7 @@ namespace connect_4_core.Tests
                 var index = (uint)e.index;
                 var board = e.Key;
                 var seq = e.Value;
-                var expectedSeq = JsonSerializer.Serialize(new HashSet<List<uint>> { new List<uint> { 0 } });
+                var expectedSeq = JsonSerializer.Serialize(new HashSet<List<uint>> { new List<uint> { index } });
 
                 // Verify board
                 for (uint col = 0; col < 7; col++)
@@ -104,10 +186,9 @@ namespace connect_4_core.Tests
                         }
                     }
                 }
-
                 // Verify play sequences
-                var actualSeq = JsonSerializer.Serialize(seq)
-;                Assert.AreEqual(expectedSeq, actualSeq);
+                var actualSeq = JsonSerializer.Serialize(seq);
+                Assert.AreEqual(expectedSeq, actualSeq);
             }
         }
     }
