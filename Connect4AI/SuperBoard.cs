@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using connect_4_core;
+using System.Collections;
 
 namespace Connect4AI
 {
+    public record SuperBoard(IBoard Board, PlaySequenceSet PlaySequenceSet);
     public class PlaySequence : IEnumerable<uint>
     {
         List<uint> sequence = new List<uint>();

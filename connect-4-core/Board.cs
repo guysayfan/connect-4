@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 
 namespace connect_4_core
 {
@@ -108,10 +109,7 @@ namespace connect_4_core
             board[col, row] = player;
         }
 
-        public uint? Get(uint col, uint row)
-        {
-            return board[col, row];
-        }
+        public uint? Get(uint col, uint row) => board[col, row];
 
         public HashSet<uint> FindAvailableCols()
         {
@@ -142,6 +140,36 @@ namespace connect_4_core
                 }
             }
             return counter;
+        }
+
+        public override string ToString()
+        {
+            char c;
+            var result = new StringBuilder("", 48);
+            for (uint row = 0; row < 6; row++)
+            {
+                var ln = new StringBuilder("", 7);
+                for (uint col = 0; col < 7; col++)
+                {
+                    var player = Get(col, row);
+                    switch (player)
+                    {
+                        case 0:
+                            c = 'o';
+                            break;
+                        case 1:
+                            c = 'x';
+                            break;
+                        default:
+                            c = '.';
+                            break;
+                    }
+                    ln.Append(c);
+                }
+                Console.WriteLine(ln.ToString());
+                result.Append(ln + Environment.NewLine);
+            }
+            return result.ToString();
         }
     }
 }

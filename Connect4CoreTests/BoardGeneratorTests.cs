@@ -44,7 +44,7 @@ namespace connect_4_core.Tests
             
             foreach (var e in allBoards)
             {
-                var board = e.Key;
+                var board = e.Value.Board;
                 var pieceCount = board.CountPieces();
                 uint expected = 2;
 
@@ -74,9 +74,9 @@ namespace connect_4_core.Tests
 
             foreach (var e in allBoards)
             {
-                var board = e.Key;
+                var board = e.Value.Board;
                 var pieceCount = board.CountPieces();
-                uint expected = 8;
+                uint expected = 27;
 
                 Assert.AreEqual(expected, pieceCount);
             }
@@ -84,7 +84,7 @@ namespace connect_4_core.Tests
             foreach (var e in allBoards.Select((e, index) => new { e.Key, e.Value, index }))
             {
                 var index = (uint)e.index;
-                var seqs = e.Value;
+                var seqs = e.Value.PlaySequenceSet;
                 
                 foreach (var seq in seqs)
                 {
@@ -155,17 +155,16 @@ namespace connect_4_core.Tests
             .......
             .......
             .......";
-            var bb = bg.BuildBoard(b);
-            var pSequences = new PlaySequenceSet();
-            var result = bg.GenerateBoards(bb, 0, pSequences);
+            var sb = new SuperBoard(bg.BuildBoard(b), new PlaySequenceSet());
+            var result = bg.GenerateBoards(sb, 0);
 
             Assert.AreEqual(result.Count, 7);
 
             foreach (var e in result.Select((e, index) => new {  e.Key, e.Value, index }))
             {
                 var index = (uint)e.index;
-                var board = e.Key;
-                var seq = e.Value;
+                var board = e.Value.Board;
+                var seq = e.Value.PlaySequenceSet;
                 var expectedSeq = JsonSerializer.Serialize(new HashSet<List<uint>> { new List<uint> { index } });
 
                 // Verify board

@@ -1,7 +1,7 @@
 ﻿using connect_4_core;
 using System.Text;
 
-using BoardDict = System.Collections.Generic.Dictionary<connect_4_core.IBoard, Connect4AI.PlaySequenceSet>;
+using BoardDict = System.Collections.Generic.Dictionary<string, Connect4AI.SuperBoard>;
 using Debug = System.Diagnostics.Debug;
 
 namespace Connect4AI
@@ -11,7 +11,7 @@ namespace Connect4AI
         public BoardDict GenerateAllBoards(IBoard initBoard, PlaySequenceSet pss, uint lookAhead, uint player)
         {
             var boards = new BoardDict();
-            boards[initBoard] = pss;
+            boards[initBoard.ToString()] = new SuperBoard(initBoard, pss);
 
             for (uint i = 0; i < lookAhead; i++)
             {
@@ -19,25 +19,22 @@ namespace Connect4AI
                 var newBoards = new BoardDict();
                 foreach (var entry in boards)
                 {
-                    var b = entry.Key;
-                    var ps = entry.Value;
+                    var key = entry.Key;
+                    var superBoard = entry.Value;
                     var p = i % 2 == 0 ? player : 1 - player;
-                    var bd = GenerateBoards(b, p, ps);
+                    var bd = GenerateBoards(superBoard, p);
 
                     foreach (var e in bd)
                     {
-                        var bb = e.Key;
-                        var sq = e.Value;
-
-                        if (newBoards.ContainsKey(bb))
+                        var sb = e.Value;
+                        if (newBoards.ContainsKey(e.Key))
                         {
-                            newBoards[bb].Merge(sq);
+                            newBoards[e.Key].PlaySequenceSet.Merge(sb.PlaySequenceSet);
                         }
                         else
                         {
-                            newBoards[bb] = sq;
+                            newBoards[e.Key] = sb;
                         }
-                        Debug.WriteLine(sq);
                     }
 
                     boards = newBoards;
@@ -105,31 +102,7 @@ namespace Connect4AI
         public string DisplayBoard(IBoard b)
         {
             var bb = (Board)b;
-            char c;
-            var result = new StringBuilder("", 48);
-            for (uint row = 0; row < 6; row++)
-            {
-                var ln = new StringBuilder("", 7);
-                for (uint col = 0; col < 7; col++)
-                {
-                    var player = bb.Get(col, row);
-                    switch (player) {
-                        case 0:
-                            c = 'o'; 
-                            break;
-                        case 1:
-                            c = 'x';
-                            break;
-                        default:
-                            c = '.';
-                            break;
-                    }
-                    ln.Append(c);
-                }
-                Console.WriteLine(ln.ToString());
-                result.Append(ln + Environment.NewLine);
-            }
-            return result.ToString();
+            return bb.ToString();
         }
 
         public string UnindentString(string s)
@@ -145,8 +118,10 @@ namespace Connect4AI
             return result.ToString();
         }
 
-        public BoardDict GenerateBoards(IBoard board, uint player, PlaySequenceSet playSequences)
+        public BoardDict GenerateBoards(SuperBoard sb, uint player)
         {
+            var board = sb.Board;
+            var playSequences = sb.PlaySequenceSet;
             Debug.WriteLine($"original: {playSequences}");
             var boards = new BoardDict();
 
@@ -170,7 +145,7 @@ namespace Connect4AI
                     seq.Add(i);
                     Debug.WriteLine($"after: {seq}");
                 }
-                boards.Add(b, new PlaySequenceSet(cloneSequences));
+                boards[b.ToString()] = new SuperBoard(b, cloneSequences);
             }
 
             return boards;

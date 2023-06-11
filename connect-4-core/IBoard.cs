@@ -23,5 +23,7 @@ namespace connect_4_core
         HashSet<uint> FindAvailableCols();
 
         uint CountPieces();
+
+        string ToString();
     }
 }
