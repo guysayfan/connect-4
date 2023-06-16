@@ -10,6 +10,6 @@ namespace connect_4_core
     {
         void OnDropPiece(Location location);
 
-        void OnGameOver(uint winner);
+        void OnGameOver(PlayerID winner);
     }
 }

@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 
 namespace connect_4_core
 {
-    enum Player : uint
-    {
-        Player1,
-        Player2,
-        None
-    }
 
     public class GameEngine : IGameEngine
     {
@@ -20,40 +14,43 @@ namespace connect_4_core
         Board board;
 
         Random rnd;
-        uint activePlayer;
+        PlayerID activePlayer;
 
-        uint winner = NO_WINNER;
+        PlayerID winner = PlayerID.None;
 
         public GameEngine()
         {
             board = new Board();
             rnd = new Random();
-            activePlayer = (uint)rnd.Next(2);
+            activePlayer = rnd.Next(2) == 0 ? PlayerID.One : PlayerID.Two;
         }
-        public uint GetActivePlayer()
+        public PlayerID GetActivePlayer()
         {
             return activePlayer;
         }
 
-        public uint GetWinner()
+        public PlayerID GetWinner()
         {
             return winner;
         }
 
         public Board GetBoard()
         {
-            return board;
+            return new Board(board);
         }
 
 
         public void Run(IPlayer p1, IPlayer p2, IGameEngineEvents sink)
         {
-            IPlayer[] players = {p1, p2};
+             var players = new Dictionary<PlayerID, IPlayer> { 
+                 { PlayerID.One, p1 }, 
+                 { PlayerID.Two, p2 } 
+             };
 
             Location location = new Location(0, 0);
             while (!IsGameOver(location.Col)) {
-                activePlayer = activePlayer == 0U ? 1U : 0U;
-                location.Col = players[activePlayer].Play(board);
+                activePlayer = activePlayer == PlayerID.One ? PlayerID.Two : PlayerID.One;
+                location.Col = players[activePlayer].Play(GetBoard());
                 location.Row = board.DropPiece(location.Col, activePlayer);
                 sink.OnDropPiece(location);
             }

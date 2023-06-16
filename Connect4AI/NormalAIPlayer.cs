@@ -10,12 +10,12 @@ namespace connect_4
 {
     public class NormalAIPlayer : IPlayer
     {
-        uint aiPlayer;
-        uint human;
-        public NormalAIPlayer(uint player, uint human)
+        PlayerID aiPlayer;
+        PlayerID human;
+        public NormalAIPlayer(PlayerID player)
         {
             aiPlayer = player;
-            this.human = human;
+            human = aiPlayer == PlayerID.One ? PlayerID.Two : PlayerID.One;
         }
 
         VictoryChecker victoryChecker = new VictoryChecker();
@@ -46,7 +46,7 @@ namespace connect_4
             return col;
         }
 
-        private HashSet<uint> FindWinningCols(Board board, uint player)
+        private HashSet<uint> FindWinningCols(Board board, PlayerID player)
         {
             var cols = new HashSet<uint>();
             for (uint i = 0; i < 7; i++)

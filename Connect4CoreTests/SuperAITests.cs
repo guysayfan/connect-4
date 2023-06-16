@@ -8,7 +8,7 @@ namespace connect_4_core.Tests
     public class SuperAITests
     {
         Board b = new Board();
-        SuperAIPlayer n = new SuperAIPlayer(1, 0, 3);
+        SuperAIPlayer n = new SuperAIPlayer(PlayerID.Two, 3);
 
 
         [TestInitialize()]

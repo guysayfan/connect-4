@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace connect_4_core
 {
+    public enum PlayerID : int
+    {
+        None = 0,
+        One,
+        Two,
+        
+    }
+
     public interface IGameEngine
     {
-        uint GetActivePlayer();
+        PlayerID GetActivePlayer();
 
-        uint GetWinner();
+        PlayerID GetWinner();
 
         Board GetBoard();
 

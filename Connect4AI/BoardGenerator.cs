@@ -8,7 +8,7 @@ namespace Connect4AI
 {
     public class BoardGenerator
     {
-        public BoardDict GenerateAllBoards(Board initBoard, PlaySequenceSet pss, uint lookAhead, uint player)
+        public BoardDict GenerateAllBoards(Board initBoard, PlaySequenceSet pss, uint lookAhead, PlayerID player)
         {
             var boards = new BoardDict();
             boards[initBoard.ToString()] = new SuperBoard(initBoard, pss);
@@ -21,7 +21,7 @@ namespace Connect4AI
                 {
                     var key = entry.Key;
                     var superBoard = entry.Value;
-                    var p = i % 2 == 0 ? player : 1 - player;
+                    var p = i % 2 == 0 ? player : player == PlayerID.One ? PlayerID.Two : PlayerID.One;
                     var bd = GenerateBoards(superBoard, p);
 
                     foreach (var e in bd)
@@ -72,6 +72,13 @@ namespace Connect4AI
                 throw new Exception("Invalid # of lines.");
             }
 
+            var d = new Dictionary<char, PlayerID>
+            {
+                {'x', PlayerID.One },
+                {'o', PlayerID.Two},
+                {'.', PlayerID.None },
+            };
+
             for (uint i = 0; i < 6; i++)
             {
                 var line = lines[i];
@@ -83,16 +90,9 @@ namespace Connect4AI
 
                 for (uint j = 0; j < line.Length; j++)
                 {
-                    var c = char.ToLower(line[(int)j]);
-
-                    if (c == 'o' || c == '0')
-                    {
-                        newBoard.Set(j, i, 0);
-                    }
-                    if (c == 'x' || c == '1')
-                    {
-                        newBoard.Set(j, i, 1);
-                    }
+                    var c = char.ToLower(line[(int)j]);                    
+                    var player = d[c];
+                    newBoard.Set(j, i, player);
                 }
             }
 
@@ -118,7 +118,7 @@ namespace Connect4AI
             return result.ToString();
         }
 
-        public BoardDict GenerateBoards(SuperBoard sb, uint player)
+        public BoardDict GenerateBoards(SuperBoard sb, PlayerID player)
         {
             var board = sb.Board;
             var playSequences = sb.PlaySequenceSet;

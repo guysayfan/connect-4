@@ -8,7 +8,7 @@ namespace connect_4_core.Tests
     public class NormalAITests
     {
         Board b = new Board();
-        NormalAIPlayer n = new NormalAIPlayer(1, 0);
+        NormalAIPlayer n = new NormalAIPlayer(PlayerID.Two);
 
 
         [TestInitialize()]

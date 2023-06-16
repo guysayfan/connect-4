@@ -30,14 +30,14 @@ namespace connect_4_core.Tests
             .......";
             var bb = bg.BuildBoard(b);
             var pSequences = new PlaySequenceSet();
-            uint player = 0;
+            var player = PlayerID.One;
             var b23 = $@"
             .......
             .......
             .......
             .......
             .......
-            ..10...";
+            ..ox...";
 
             var allBoards = bg.GenerateAllBoards(bb, pSequences, 2, player);
             
@@ -59,15 +59,15 @@ namespace connect_4_core.Tests
         public void GenerateAllBoardsDuplicates_Test()
         {
             var b = $@"
-            ...1001
-            ...0110
-            ...1001
-            ...0110
-            ...1001
-            ...0110";
+            ...oxxo
+            ...xoox
+            ...oxxo
+            ...xoox
+            ...oxxo
+            ...xoox";
             var bb = bg.BuildBoard(b);
             var pSequences = new PlaySequenceSet();
-            uint player = 0;
+            PlayerID player = PlayerID.One;
             uint lookahead = 3;
 
             var allBoards = bg.GenerateAllBoards(bb, pSequences, lookahead, player);
@@ -156,7 +156,7 @@ namespace connect_4_core.Tests
             .......
             .......";
             var sb = new SuperBoard(bg.BuildBoard(b), new PlaySequenceSet());
-            var result = bg.GenerateBoards(sb, 0);
+            var result = bg.GenerateBoards(sb, PlayerID.One);
 
             Assert.AreEqual(result.Count, 7);
 
@@ -177,10 +177,10 @@ namespace connect_4_core.Tests
 
                         if (col == index && row == 5)
                         {
-                            Assert.AreEqual((int)player, 0);
+                            Assert.AreEqual(player, PlayerID.One);
                         } else
                         {
-                            Assert.AreEqual(player, null);
+                            Assert.AreEqual(player, PlayerID.None);
                         }
                     }
                 }

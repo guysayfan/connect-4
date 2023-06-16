@@ -29,26 +29,26 @@ namespace connect_4_core.Tests
         [TestMethod()]
         public void DropPieceSuccess_Test()
         {
-            Assert.IsNull(b.GetPlayer(loc25));
-            b.DropPiece(2, 1);
-            Assert.AreEqual(1U, b.GetPlayer(loc25));
+            Assert.AreEqual(PlayerID.None, b.GetPlayer(loc25));
+            b.DropPiece(2, PlayerID.Two);
+            Assert.AreEqual(PlayerID.Two, b.GetPlayer(loc25));
         }
 
         [TestMethod()]
         public void DropPieceInFullCol_Test()
         {
-            Assert.IsNull(b.GetPlayer(loc25));
+            Assert.AreEqual(PlayerID.None, b.GetPlayer(loc25));
             // Drop 6 pieces in column 2
             for (uint i = 0; i < 6; i++)
             {
-                b.DropPiece(2, 1);
+                b.DropPiece(2, PlayerID.Two);
             }
             Assert.IsTrue(b.IsColFull(2));
 
             // Drop another price, expect an Exception
             try
             {
-                b.DropPiece(2, 1);
+                b.DropPiece(2, PlayerID.Two);
                 // Should never get here
                 Assert.Fail();
             } catch (Exception)
@@ -59,7 +59,7 @@ namespace connect_4_core.Tests
         [TestMethod()]
         public void CheckWinTopLeftBottomRight_Test()
         {
-            var win = b.CheckWin(0, 0);
+            var win = b.CheckWin(0, PlayerID.One);
             Assert.IsFalse(win);
             // 
 
@@ -72,19 +72,19 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckWin(0, 0);
+            win = b.CheckWin(0, PlayerID.One);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 2, 2 });
             b.Populate(p1List, p2List);
-            win = b.CheckWin(loc00.Col, 0);
+            win = b.CheckWin(loc00.Col, PlayerID.One);
             Assert.IsFalse(win);
         }
 
         [TestMethod()]
         public void CheckWinBottomLeftTopRight_Test()
         {
-            var win = b.CheckWin(loc15.Col, 0);
+            var win = b.CheckWin(loc15.Col, PlayerID.One);
             Assert.IsFalse(win);
             // 
 
@@ -97,7 +97,7 @@ namespace connect_4_core.Tests
             List<int[]> p2List = new List<int[]>();
             b.Populate(p1List, p2List);
 
-            win = b.CheckWin(1, 0);
+            win = b.CheckWin(1, PlayerID.One);
             Assert.IsTrue(win);
 
             p2List.Add(new int[] { 4, 2 });
@@ -111,23 +111,8 @@ namespace connect_4_core.Tests
             p1List.Add(new int[] { 3, 2 });
 
             b.Populate(p1List, p2List);
-            win = b.CheckWin(loc05.Col, 0);
+            win = b.CheckWin(loc05.Col, PlayerID.One);
             Assert.IsTrue(win);
-
-
-
-
         }
-        //[TestMethod()]
-        //public void IsColFullTest()
-        //{
-        //    Assert.Fail();
-        //}
-
-        //[TestMethod()]
-        //public void GetPlayerTest()
-        //{
-        //    Assert.Fail();
-        //}
     }
 }

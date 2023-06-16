@@ -39,7 +39,7 @@ namespace connect_4
             var height = 2 * (penWidth + 2 * offset) + 6 * cellSize;
             ClientSize = new Size(width, height);
 
-            Task.Run(() => engine.Run(this, new NormalAIPlayer(1, 0), this));
+            Task.Run(() => engine.Run(this, new NormalAIPlayer(PlayerID.Two), this));
         }
 
         private void connect4_Paint(object sender, PaintEventArgs e)
@@ -69,10 +69,10 @@ namespace connect_4
                     var location = new Location(col, row);
                     var player = board.GetPlayer(location);
                     Brush color = brushWhite;
-                    if (player == 0)
+                    if (player == PlayerID.One)
                     {
                         color = brushRed;
-                    } else if (player == 1)
+                    } else if (player == PlayerID.Two)
                     {
                         color = brushYellow;
                     }
@@ -114,6 +114,7 @@ namespace connect_4
 
         public void OnDropPiece(Location location)
         {
+            board = engine.GetBoard();
             var cell = calcCellRect(location);
             Invalidate(cell);
         }
@@ -130,13 +131,13 @@ namespace connect_4
             return result;
         }
 
-        public void OnGameOver(uint winner)
+        public void OnGameOver(PlayerID winner)
         {
             string message;
-            if (winner == 0)
+            if (winner == PlayerID.One)
             {
                 message = "You win!";
-            } else if (winner == 1)
+            } else if (winner == PlayerID.Two)
             {
                 message = "You lose. :(";
             } else

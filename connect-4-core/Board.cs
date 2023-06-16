@@ -10,7 +10,7 @@ namespace connect_4_core
 
         const int INVALID_ROW = 999;
 
-        uint?[,] board = new uint?[7, 6];
+        PlayerID[,] board = new PlayerID[7, 6];
 
         public Board()
         {
@@ -27,7 +27,7 @@ namespace connect_4_core
             }            
         }
 
-        public uint DropPiece(uint col, uint player)
+        public uint DropPiece(uint col, PlayerID player)
         {
             var topRow = FindTopRow(col);
             if (topRow == INVALID_ROW)
@@ -44,7 +44,7 @@ namespace connect_4_core
             var topRow = FindTopRow(col);
             if (topRow != INVALID_ROW)
             {
-                board[col, topRow] = null;
+                board[col, topRow] = PlayerID.None;
             }
         }
 
@@ -53,23 +53,22 @@ namespace connect_4_core
             return FindTopRow(col) == INVALID_ROW;
         }
         
-        public uint? GetPlayer(Location location)
+        public PlayerID GetPlayer(Location location)
         {
             return board[location.Col, location.Row];
         }
 
-    
 
         public uint FindTopRow(uint col)
         {
-            if (board[col, 0] != null) {
+            if (board[col, 0] != PlayerID.None) {
                 return INVALID_ROW;
             }
 
             uint i;
             for (i = 1; i < 6; i++)
             {                
-                if (board[col, i] != null)
+                if (board[col, i] != PlayerID.None)
                 {
                     break;
                 }
@@ -77,7 +76,7 @@ namespace connect_4_core
             return i - 1;
         }
 
-        public bool CheckWin(uint col, uint player)
+        public bool CheckWin(uint col, PlayerID player)
         {
             return victoryChecker.CheckVictory(this, col, player);
         }
@@ -91,23 +90,23 @@ namespace connect_4_core
             {
                 var row = item[1];
                 var col = item[0];
-                board[col, row] = 0;
+                board[col, row] = PlayerID.One;
             });
 
             player2Pieces.ForEach(item =>
             {
                 var row = item[1];
                 var col = item[0];
-                board[col, row] = 1;
+                board[col, row] = PlayerID.Two;
             });
         }
 
-        public void Set(uint col, uint row, uint player)
+        public void Set(uint col, uint row, PlayerID player)
         {
             board[col, row] = player;
         }
 
-        public uint? Get(uint col, uint row) => board[col, row];
+        public PlayerID Get(uint col, uint row) => board[col, row];
 
         public HashSet<uint> FindAvailableCols()
         {
@@ -131,7 +130,7 @@ namespace connect_4_core
             {
                 for (uint j = 0; j < 7; j++)
                 {
-                    if (board[j, i] != null)
+                    if (board[j, i] != PlayerID.None)
                     {
                         counter++;
                     }
@@ -152,11 +151,11 @@ namespace connect_4_core
                     var player = Get(col, row);
                     switch (player)
                     {
-                        case 0:
-                            c = 'o';
-                            break;
-                        case 1:
+                        case PlayerID.One:
                             c = 'x';
+                            break;
+                        case PlayerID.Two:
+                            c = 'o';
                             break;
                         default:
                             c = '.';

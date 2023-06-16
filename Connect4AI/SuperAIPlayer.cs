@@ -10,13 +10,13 @@ namespace connect_4
 {
     public class SuperAIPlayer : IPlayer
     {
-        uint aiPlayer;
-        uint human;
+        PlayerID aiPlayer;
+        PlayerID human;
         uint lookAhead;
-        public SuperAIPlayer(uint player, uint human, uint lookAhead)
+        public SuperAIPlayer(PlayerID player, uint lookAhead)
         {
             aiPlayer = player;
-            this.human = human;
+            human = aiPlayer == PlayerID.One ? PlayerID.Two : PlayerID.One;
             this.lookAhead = lookAhead;
         }
 
@@ -57,7 +57,7 @@ namespace connect_4
         }
 
         // Finds columns that lead to a sure victory for AI player or human player on their next turn
-        private Dictionary<uint, Board> CheckBoards(HashSet<Board> boards, uint player)
+        private Dictionary<uint, Board> CheckBoards(HashSet<Board> boards, PlayerID player)
         {
             var result = new Dictionary<uint, Board>();
             foreach(Board b in boards)
@@ -68,7 +68,7 @@ namespace connect_4
             return result;
         }
 
-        private HashSet<uint> FindWinningCols(Board board, uint player)
+        private HashSet<uint> FindWinningCols(Board board, PlayerID player)
         {
             var cols = new HashSet<uint>();
             for (uint i = 0; i < 7; i++)
