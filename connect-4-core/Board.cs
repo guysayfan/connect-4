@@ -3,7 +3,7 @@ using System.Text;
 
 namespace connect_4_core
 {
-    public class Board : IBoard
+    public class Board
     {
         VictoryChecker victoryChecker = new VictoryChecker();
 
@@ -16,15 +16,13 @@ namespace connect_4_core
         {
         }
 
-        public Board(IBoard b)
+        public Board(Board b)
         {
-            Board bb = (Board)b;
-
             for (uint col = 0; col < 7; col++)
             {
                 for (int row = 0; row < 6; row++) 
                 {
-                    board[col, row] = bb.board[col, row];
+                    board[col, row] = b.board[col, row];
                 }
             }            
         }

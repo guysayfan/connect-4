@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Connect4AI
 {
-    public record SuperBoard(IBoard Board, PlaySequenceSet PlaySequenceSet);
+    public record SuperBoard(Board Board, PlaySequenceSet PlaySequenceSet);
     public class PlaySequence : IEnumerable<uint>
     {
         List<uint> sequence = new List<uint>();

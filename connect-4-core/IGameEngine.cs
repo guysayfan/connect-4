@@ -12,8 +12,8 @@ namespace connect_4_core
 
         uint GetWinner();
 
-        void Run(IPlayer player1, IPlayer player2, IGameEngineEvents sink);
+        Board GetBoard();
 
-        IBoard GetBoard();
+        void Run(IPlayer player1, IPlayer player2, IGameEngineEvents sink);
     }
 }

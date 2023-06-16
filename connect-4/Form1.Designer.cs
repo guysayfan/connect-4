@@ -1,6 +1,6 @@
 ﻿namespace connect_4
 {
-    partial class connect4
+    partial class Connect4
     {
         /// <summary>
         ///  Required designer variable.

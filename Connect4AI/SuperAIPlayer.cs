@@ -23,7 +23,7 @@ namespace connect_4
         VictoryChecker victoryChecker = new VictoryChecker();
 
         Random rnd = new Random();
-        public uint Play(IBoard board)
+        public uint Play(Board board)
         {
             Thread.Sleep(1000);
 
@@ -47,7 +47,7 @@ namespace connect_4
         }
 
 
-        private uint[] FindPotentialCols(IBoard board)
+        private uint[] FindPotentialCols(Board board)
         {
             var cols = new HashSet<uint>();
 
@@ -57,10 +57,10 @@ namespace connect_4
         }
 
         // Finds columns that lead to a sure victory for AI player or human player on their next turn
-        private Dictionary<uint, IBoard> CheckBoards(HashSet<IBoard> boards, uint player)
+        private Dictionary<uint, Board> CheckBoards(HashSet<Board> boards, uint player)
         {
-            var result = new Dictionary<uint, IBoard>();
-            foreach(IBoard b in boards)
+            var result = new Dictionary<uint, Board>();
+            foreach(Board b in boards)
             {
                 var cols = FindWinningCols(b, player);
             }
@@ -68,7 +68,7 @@ namespace connect_4
             return result;
         }
 
-        private HashSet<uint> FindWinningCols(IBoard board, uint player)
+        private HashSet<uint> FindWinningCols(Board board, uint player)
         {
             var cols = new HashSet<uint>();
             for (uint i = 0; i < 7; i++)

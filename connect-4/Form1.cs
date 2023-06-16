@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace connect_4
 {
-    public partial class connect4 : Form, IGameEngineEvents, IPlayer
+    public partial class Connect4 : Form, IGameEngineEvents, IPlayer
     {
         const int INVALID_COL = 999;
 
@@ -23,10 +23,10 @@ namespace connect_4
 
         IGameEngine engine = new GameEngine();
 
-        IBoard board;
+        Board board;
 
 
-        public connect4()
+        public Connect4()
         {
             board = engine.GetBoard();
             InitializeComponent();
@@ -119,7 +119,7 @@ namespace connect_4
         }
 
 
-        public uint Play(IBoard board)
+        public uint Play(Board board)
         {
             while (clickedCol == INVALID_COL) {
                 Thread.Sleep(100);

@@ -21,7 +21,7 @@ namespace connect_4
         VictoryChecker victoryChecker = new VictoryChecker();
 
         Random rnd = new Random();
-        public uint Play(IBoard board)
+        public uint Play(Board board)
         {
             Thread.Sleep(1000);
 
@@ -46,7 +46,7 @@ namespace connect_4
             return col;
         }
 
-        private HashSet<uint> FindWinningCols(IBoard board, uint player)
+        private HashSet<uint> FindWinningCols(Board board, uint player)
         {
             var cols = new HashSet<uint>();
             for (uint i = 0; i < 7; i++)

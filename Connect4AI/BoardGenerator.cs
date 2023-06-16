@@ -8,7 +8,7 @@ namespace Connect4AI
 {
     public class BoardGenerator
     {
-        public BoardDict GenerateAllBoards(IBoard initBoard, PlaySequenceSet pss, uint lookAhead, uint player)
+        public BoardDict GenerateAllBoards(Board initBoard, PlaySequenceSet pss, uint lookAhead, uint player)
         {
             var boards = new BoardDict();
             boards[initBoard.ToString()] = new SuperBoard(initBoard, pss);
@@ -62,7 +62,7 @@ namespace Connect4AI
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
-        public IBoard BuildBoard(string bb)
+        public Board BuildBoard(string bb)
         {
             var b = UnindentString(bb);
             var newBoard = new Board();
@@ -99,7 +99,7 @@ namespace Connect4AI
             return newBoard;
         }
 
-        public string DisplayBoard(IBoard b)
+        public string DisplayBoard(Board b)
         {
             var bb = (Board)b;
             return bb.ToString();

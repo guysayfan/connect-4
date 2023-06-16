@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace connect_4_core
 {
+    enum Player : uint
+    {
+        Player1,
+        Player2,
+        None
+    }
+
     public class GameEngine : IGameEngine
     {
         const uint NO_WINNER = 999;
@@ -33,7 +40,7 @@ namespace connect_4_core
             return winner;
         }
 
-        public IBoard GetBoard()
+        public Board GetBoard()
         {
             return board;
         }
@@ -46,7 +53,7 @@ namespace connect_4_core
             Location location = new Location(0, 0);
             while (!IsGameOver(location.Col)) {
                 activePlayer = activePlayer == 0U ? 1U : 0U;
-                location.Col = players[activePlayer].Play(GetBoard());
+                location.Col = players[activePlayer].Play(board);
                 location.Row = board.DropPiece(location.Col, activePlayer);
                 sink.OnDropPiece(location);
             }

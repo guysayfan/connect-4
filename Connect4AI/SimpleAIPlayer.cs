@@ -11,7 +11,7 @@ namespace connect_4
     public class SimpleAIPlayer : IPlayer
     {
         Random rnd = new Random();
-        public uint Play(IBoard board)
+        public uint Play(Board board)
         {
             Thread.Sleep(1000);
             int col = rnd.Next(7);

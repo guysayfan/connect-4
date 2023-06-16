@@ -10,13 +10,13 @@ namespace connect_4_core
 {
     public class VictoryChecker
     {
-        private uint getRow(IBoard board, uint col)
+        private uint getRow(Board board, uint col)
         {
             var row = board.FindTopRow(col) + 1;
             return row > 6 ? 0 : row;
         }
 
-        private bool CheckVerticalWin(IBoard board, uint col, uint player)
+        private bool CheckVerticalWin(Board board, uint col, uint player)
         {
             var row = board.FindTopRow(col) + 1;
             if (row > 2)
@@ -33,7 +33,7 @@ namespace connect_4_core
             return true;
         }
 
-        private bool CheckHorizontalWin(IBoard board, uint col, uint player)
+        private bool CheckHorizontalWin(Board board, uint col, uint player)
         {
             uint counter = 1;
             var row = getRow(board, col);
@@ -78,7 +78,7 @@ namespace connect_4_core
             return counter >= 4;
         }
 
-        private bool CheckTopLeftBotRightWin(IBoard board, uint col, uint player)
+        private bool CheckTopLeftBotRightWin(Board board, uint col, uint player)
         {
             uint counter = 1;
             var row = getRow(board, col);
@@ -119,7 +119,7 @@ namespace connect_4_core
             return counter >= 4;
         }
 
-        private bool CheckBotLeftTopRightWin(IBoard board, uint col, uint player)
+        private bool CheckBotLeftTopRightWin(Board board, uint col, uint player)
         {
             uint counter = 1;
             var row = getRow(board, col);
@@ -162,7 +162,7 @@ namespace connect_4_core
             return counter >= 4;
         }
 
-        public bool CheckVictory(IBoard board, uint col, uint player)
+        public bool CheckVictory(Board board, uint col, uint player)
         {
             if (CheckVerticalWin(board, col, player)) { 
                 return true;
