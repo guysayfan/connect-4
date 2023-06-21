@@ -49,7 +49,7 @@ namespace connect_4_core
 
             Location location = new Location(0, 0);
             while (!IsGameOver(location.Col)) {
-                activePlayer = activePlayer == PlayerID.One ? PlayerID.Two : PlayerID.One;
+                activePlayer = activePlayer.Other();
                 location.Col = players[activePlayer].Play(GetBoard());
                 location.Row = board.DropPiece(location.Col, activePlayer);
                 sink.OnDropPiece(location);

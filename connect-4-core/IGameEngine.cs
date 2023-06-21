@@ -10,8 +10,18 @@ namespace connect_4_core
     {
         None = 0,
         One,
-        Two,
-        
+        Two
+    }
+    public static class Extensions
+    {
+        public static PlayerID Other(this PlayerID p)
+        {
+            if (p == PlayerID.None)
+            {
+                throw new Exception("There is no alternate player for None");
+            }
+            return p == PlayerID.One ? PlayerID.Two : PlayerID.One;
+        }
     }
 
     public interface IGameEngine

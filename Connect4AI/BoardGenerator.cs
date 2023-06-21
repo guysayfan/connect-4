@@ -21,7 +21,7 @@ namespace Connect4AI
                 {
                     var key = entry.Key;
                     var superBoard = entry.Value;
-                    var p = i % 2 == 0 ? player : player == PlayerID.One ? PlayerID.Two : PlayerID.One;
+                    var p = i % 2 == 0 ? player : player.Other();
                     var bd = GenerateBoards(superBoard, p);
 
                     foreach (var e in bd)

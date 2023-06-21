@@ -65,7 +65,7 @@ namespace Connect4AI
 
         public PlaySequenceSet(PlaySequenceSet ps)
         {   
-            foreach (var seq  in ps.sequences)
+            foreach (var seq in ps.sequences)
             {
                 sequences.Add(new PlaySequence(seq));
             }

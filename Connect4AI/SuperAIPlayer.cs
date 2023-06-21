@@ -1,4 +1,5 @@
 ﻿using connect_4_core;
+using Connect4AI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,13 @@ using System.Threading.Tasks;
 
 namespace connect_4
 {
+    enum BoardScore : uint
+    {
+        SureVictory, // 2 places to win
+        PossibleVictory, // 1 place to win
+        Unknown // Nothing
+    }
+
     public class SuperAIPlayer : IPlayer
     {
         PlayerID aiPlayer;
@@ -16,7 +24,7 @@ namespace connect_4
         public SuperAIPlayer(PlayerID player, uint lookAhead)
         {
             aiPlayer = player;
-            human = aiPlayer == PlayerID.One ? PlayerID.Two : PlayerID.One;
+            human = aiPlayer.Other();
             this.lookAhead = lookAhead;
         }
 
@@ -89,6 +97,37 @@ namespace connect_4
                 }
             }
             return cols;
+        }
+
+        private BoardScore EvaluateBoard(Board b, PlayerID p)
+        {
+            var sb = new SuperBoard(b, new PlaySequenceSet());
+            var bg = new BoardGenerator();
+            var vc = new VictoryChecker();
+            var boards = bg.GenerateBoards(sb, p);
+            uint counter = 0;
+
+            foreach (var e in boards) {
+                for (uint i = 0; i < 7; i++)
+                {
+                    if (vc.CheckVictory(e.Value.Board, i, p.Other()))
+                    {
+                        counter++;
+                        break;
+                    }
+                }
+            }
+
+            if (counter == 0)
+            {
+                return BoardScore.Unknown;
+            } else if (counter < boards.Count)
+            {
+                return BoardScore.PossibleVictory;
+            } else
+            {
+                return BoardScore.SureVictory;
+            }
         }
     }
 }

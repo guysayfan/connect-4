@@ -15,7 +15,7 @@ namespace connect_4
         public NormalAIPlayer(PlayerID player)
         {
             aiPlayer = player;
-            human = aiPlayer == PlayerID.One ? PlayerID.Two : PlayerID.One;
+            human = aiPlayer.Other();
         }
 
         VictoryChecker victoryChecker = new VictoryChecker();
