@@ -29,6 +29,7 @@ namespace connect_4
         }
 
         VictoryChecker victoryChecker = new VictoryChecker();
+        BoardGenerator boardGenerator = new BoardGenerator();
 
         Random rnd = new Random();
         public uint Play(Board board)
@@ -55,11 +56,30 @@ namespace connect_4
         }
 
 
-        private uint[] FindPotentialCols(Board board)
+        private uint[] FindPotentialCols(Board b)
         {
             var cols = new HashSet<uint>();
+            // Generate all boards
+            var boards = boardGenerator.GenerateAllBoards(b, new PlaySequenceSet(), lookAhead, aiPlayer);
+            // Evaluate each board
+            var allScores = new Dictionary<SuperBoard, BoardScore>();
+            foreach (var e in boards)
+            {
+                var bo = e.Value.Board;
+                var bs = EvaluateBoard(bo, aiPlayer);
+                allScores.Add(e.Value, bs);
+            }
 
-
+            // Drop boards with sure loss
+            var scores = allScores.Where(pair => pair.Value >= 0)
+                                 .ToDictionary(pair => pair.Key,
+                                               pair => pair.Value);
+            // Find boards with sure victory
+            // If more than 0, extract all play sequences
+            //     Return first col from each play sequence
+            // Else, find boards with potential victory
+            // If more than 0, extract all play sequence
+            //     Return first col from each play sequence
 
             return cols.ToArray();
         }
