@@ -70,11 +70,14 @@ namespace connect_4
                 allScores.Add(e.Value, bs);
             }
 
-            // Drop boards with sure loss
-            var scores = allScores.Where(pair => pair.Value >= 0)
+            // Drop boards with unknown board score
+            var scores = allScores.Where(pair => pair.Value != BoardScore.Unknown)
                                  .ToDictionary(pair => pair.Key,
                                                pair => pair.Value);
             // Find boards with sure victory
+            var sureVictory = scores.Where(pair => pair.Value == BoardScore.SureVictory)
+                                     .Select(pair => pair.Key).ToList();
+
             // If more than 0, extract all play sequences
             //     Return first col from each play sequence
             // Else, find boards with potential victory
