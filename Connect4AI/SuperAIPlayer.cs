@@ -2,6 +2,7 @@
 using Connect4AI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -67,6 +68,8 @@ namespace connect_4
             {
                 var bo = e.Value.Board;
                 var bs = EvaluateBoard(bo, aiPlayer);
+                Debug.WriteLine(bo.ToString(), bs);
+                Debug.WriteLine("-------");
                 allScores.Add(e.Value, bs);
             }
 

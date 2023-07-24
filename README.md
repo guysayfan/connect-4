@@ -27,4 +27,5 @@ Board is considered a winning board at turn N - 2 for player A if player A wins 
 # Reference
 
 [Connect 4 AI - How it works!](https://roadtolarissa.com/connect-4-ai-how-it-works)
+[HackMD Design Doc](https://hackmd.io/hGzjvttQQtStH9FA595j3A)
 

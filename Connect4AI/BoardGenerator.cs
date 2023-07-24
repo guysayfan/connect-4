@@ -122,7 +122,6 @@ namespace Connect4AI
         {
             var board = sb.Board;
             var playSequences = sb.PlaySequenceSet;
-            Debug.WriteLine($"original: {playSequences}");
             var boards = new BoardDict();
 
             for (uint i = 0; i < 7; i++)
@@ -141,9 +140,7 @@ namespace Connect4AI
                 b.DropPiece(i, player);
                 foreach (var seq in cloneSequences)
                 {
-                    Debug.WriteLine($"before: {seq}");
                     seq.Add(i);
-                    Debug.WriteLine($"after: {seq}");
                 }
                 boards[b.ToString()] = new SuperBoard(b, cloneSequences);
             }
