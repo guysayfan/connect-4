@@ -141,19 +141,50 @@ namespace connect_4
                         counter++;
                         break;
                     }
+
+                    // Check if we can win for sure on our next turn
+                    var bb = new Board(e.Value.Board);
+                    if (bb.IsColFull(i))
+                    {
+                        continue; 
+                    }
+                    bb.DropPiece(i, p);
+
+                    for (uint j = 0; j < 7; j++)
+                    {
+                        var result = vc.CheckVictory(bb, j, p);
+                        if (result)
+                        {
+                            // If other player blocks us on column j, check if we can win on the row above
+
+                            if (bb.IsColFull(j))
+                            {
+                                continue;
+                            }
+                            bb.DropPiece(j, p.Other());
+
+                            if (bb.IsColFull(j))
+                            {
+                                continue;
+                            }
+                            bb.DropPiece(j, p);
+
+                            if (vc.CheckVictory(bb, j, p))
+                            {
+                                counter++;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
-            if (counter == 0)
-            {
-                return BoardScore.Unknown;
-            } else if (counter < boards.Count)
-            {
-                return BoardScore.PossibleVictory;
-            } else
+            if (counter == boards.Count)
             {
                 return BoardScore.SureVictory;
             }
+
+            return BoardScore.Unknown;
         }
     }
 }

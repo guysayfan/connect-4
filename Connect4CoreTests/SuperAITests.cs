@@ -83,7 +83,7 @@ namespace connect_4_core.Tests
             .......
             ....o..
             ...ox..
-            x..xxx.
+            ...xxx.
             o..oox.";
             var bb = bg.BuildBoard(b);
 
