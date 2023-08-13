@@ -34,6 +34,11 @@ namespace Connect4AI
             }
         }
 
+        public uint First 
+        { 
+            get => sequence[0]; 
+        }
+
         public void Add(uint col)
         {
             sequence.Add(col);

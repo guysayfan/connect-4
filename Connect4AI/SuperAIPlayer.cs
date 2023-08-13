@@ -57,7 +57,7 @@ namespace connect_4
         }
 
 
-        private uint[] FindPotentialCols(Board b)
+        public uint[] FindPotentialCols(Board b)
         {
             var cols = new HashSet<uint>();
             // Generate all boards
@@ -77,15 +77,19 @@ namespace connect_4
             var scores = allScores.Where(pair => pair.Value != BoardScore.Unknown)
                                  .ToDictionary(pair => pair.Key,
                                                pair => pair.Value);
-            // Find boards with sure victory
-            var sureVictory = scores.Where(pair => pair.Value == BoardScore.SureVictory)
+            // Find boards with sure or potential victory
+            var potentialVictoryScore = new HashSet<BoardScore>{ BoardScore.SureVictory, BoardScore.PossibleVictory };
+            var victory = scores.Where(pair => potentialVictoryScore.Contains(pair.Value))
                                      .Select(pair => pair.Key).ToList();
 
-            // If more than 0, extract all play sequences
-            //     Return first col from each play sequence
-            // Else, find boards with potential victory
-            // If more than 0, extract all play sequence
-            //     Return first col from each play sequence
+            // Return first col from each play sequence
+            foreach (var board in victory)
+            {
+                foreach (var sequence in board.PlaySequenceSet)
+                {
+                    cols.Add(sequence.First);
+                }
+            }
 
             return cols.ToArray();
         }
