@@ -18,8 +18,6 @@ namespace connect_4
             human = aiPlayer.Other();
         }
 
-        VictoryChecker victoryChecker = new VictoryChecker();
-
         Random rnd = new Random();
         public uint Play(Board board)
         {
@@ -61,7 +59,7 @@ namespace connect_4
                 b.DropPiece(i, player);
 
                 //if top row is replaced with ai piece checks if the ai will win
-                if (victoryChecker.CheckVictory(b, i, player))
+                if (VictoryChecker.CheckVictory(b, i, player))
                 {
                     cols.Add(i);
                 }

@@ -1,28 +1,24 @@
 ﻿using connect_4_core;
 using Connect4AI;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace connect_4
 {
-    enum BoardScore : uint
+    enum BaseColScore : uint
     {
-        SureVictory, // 2 places to win
-        PossibleVictory, // 1 place to win
-        Unknown // Nothing
+        Victory = 10000,
+        Center = 6,          // piece center column 
+        ThreeOutfOfFour = 4, // 3 pieces and 1 empty
+        TwoOutOfFour = 2     // 2 pieces and 2 empty
     }
 
-    public class SuperAIPlayer : IPlayer
+    public class MinMaxAIPlayer : IPlayer
     {
         PlayerID aiPlayer;
         PlayerID human;
         uint lookAhead;
-        public SuperAIPlayer(PlayerID player, uint lookAhead)
+        public MinMaxAIPlayer(PlayerID player, uint lookAhead)
         {
             aiPlayer = player;
             human = aiPlayer.Other();
@@ -49,6 +45,7 @@ namespace connect_4
                 return cols.First();
             }
 
+                        
             var pCols = FindPotentialCols(board);
 
             uint index = (uint)rnd.Next(pCols.Length);
@@ -130,63 +127,7 @@ namespace connect_4
 
         private BoardScore EvaluateBoard(Board b, PlayerID p)
         {
-            var sb = new SuperBoard(b, new PlaySequenceSet());
-            var bg = new BoardGenerator();
-            var boards = bg.GenerateBoards(sb, p);
-            uint counter = 0;
-
-            foreach (var e in boards) {
-                for (uint i = 0; i < 7; i++)
-                {
-                    if (VictoryChecker.CheckVictory(e.Value.Board, i, p.Other()))
-                    {
-                        counter++;
-                        break;
-                    }
-
-                    // Check if we can win for sure on our next turn
-                    var bb = new Board(e.Value.Board);
-                    if (bb.IsColFull(i))
-                    {
-                        continue; 
-                    }
-                    bb.DropPiece(i, p);
-
-                    for (uint j = 0; j < 7; j++)
-                    {
-                        var result = VictoryChecker.CheckVictory(bb, j, p);
-                        if (result)
-                        {
-                            // If other player blocks us on column j, check if we can win on the row above
-
-                            if (bb.IsColFull(j))
-                            {
-                                continue;
-                            }
-                            bb.DropPiece(j, p.Other());
-
-                            if (bb.IsColFull(j))
-                            {
-                                continue;
-                            }
-                            bb.DropPiece(j, p);
-
-                            if (VictoryChecker.CheckVictory(bb, j, p))
-                            {
-                                counter++;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (counter == boards.Count)
-            {
-                return BoardScore.SureVictory;
-            }
-
-            return BoardScore.Unknown;
+            throw new NotImplementedException();
         }
     }
 }

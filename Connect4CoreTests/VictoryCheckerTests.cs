@@ -7,8 +7,6 @@ namespace connect_4_core.Tests
     public class VictoryCheckerTests
     {
         Board b = new Board();
-        VictoryChecker v = new VictoryChecker();
-
 
         [TestInitialize()]
         public void TestInitialize()
@@ -24,7 +22,7 @@ namespace connect_4_core.Tests
             b.Set(0, 4, 0);
             b.Set(0, 5, 0);
 
-            var result = v.CheckVictory(b, 0, 0);
+            var result = VictoryChecker.CheckVictory(b, 0, 0);
             Assert.IsTrue(result);
 
             b.Set(1, 2, 0);
@@ -32,7 +30,7 @@ namespace connect_4_core.Tests
             b.Set(1, 4, 0);
             b.Set(1, 5, 0);
 
-            result = v.CheckVictory(b, 1, 0);
+            result = VictoryChecker.CheckVictory(b, 1, 0);
             Assert.IsTrue(result);
         }
 
@@ -44,7 +42,7 @@ namespace connect_4_core.Tests
             b.Set(0, 4, PlayerID.One);
             b.Set(0, 5, PlayerID.One);
 
-            var result = v.CheckVictory(b, 0, PlayerID.One);
+            var result = VictoryChecker.CheckVictory(b, 0, PlayerID.One);
             Assert.IsFalse(result);
         }
 
@@ -55,7 +53,7 @@ namespace connect_4_core.Tests
             b.Set(2, 2, PlayerID.One);
             b.Set(2, 3, PlayerID.One);
 
-            var result = v.CheckVictory(b, 2, PlayerID.One);
+            var result = VictoryChecker.CheckVictory(b, 2, PlayerID.One);
             Assert.IsTrue(result);
         }
 
@@ -67,7 +65,7 @@ namespace connect_4_core.Tests
             b.Set(2, 4, PlayerID.Two);
             b.Set(2, 5, PlayerID.One);
 
-            var result = v.CheckVictory(b, 2, PlayerID.One);
+            var result = VictoryChecker.CheckVictory(b, 2, PlayerID.One);
             Assert.IsFalse(result);
         }
 
@@ -80,12 +78,12 @@ namespace connect_4_core.Tests
             b.Set(3, 5, PlayerID.One);
             b.Set(4, 5, PlayerID.One);
 
-            var result = v.CheckVictory(b, 3, PlayerID.One);
+            var result = VictoryChecker.CheckVictory(b, 3, PlayerID.One);
             Assert.IsTrue(result);
 
             b.Set(2, 5, PlayerID.Two);
 
-            result = v.CheckVictory(b, 3, PlayerID.One);
+            result = VictoryChecker.CheckVictory(b, 3, PlayerID.One);
             Assert.IsFalse(result);
         }
 
@@ -97,12 +95,12 @@ namespace connect_4_core.Tests
             b.Set(4, 3, PlayerID.One);
             b.Set(3, 2, PlayerID.One);
 
-            var result = v.CheckVictory(b, 6, PlayerID.One);
+            var result = VictoryChecker.CheckVictory(b, 6, PlayerID.One);
             Assert.IsTrue(result);
 
             b.Set(3, 2, PlayerID.Two);
 
-            result = v.CheckVictory(b, 6, PlayerID.One);
+            result = VictoryChecker.CheckVictory(b, 6, PlayerID.One);
             Assert.IsFalse(result);
         }
 
@@ -114,12 +112,12 @@ namespace connect_4_core.Tests
             b.Set(2, 3, PlayerID.One);
             b.Set(3, 2, PlayerID.One);
 
-            var result = v.CheckVictory(b, 2, PlayerID.One);
+            var result = VictoryChecker.CheckVictory(b, 2, PlayerID.One);
             Assert.IsTrue(result);
 
             b.Set(3, 2, PlayerID.Two);
 
-            result = v.CheckVictory(b, 2, PlayerID.One);
+            result = VictoryChecker.CheckVictory(b, 2, PlayerID.One);
             Assert.IsFalse(result);
         }
     }

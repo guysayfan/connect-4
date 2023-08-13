@@ -5,9 +5,6 @@ namespace connect_4_core
 {
     public class Board
     {
-        VictoryChecker victoryChecker = new VictoryChecker();
-
-
         const int INVALID_ROW = 999;
 
         PlayerID[,] board = new PlayerID[7, 6];
@@ -78,7 +75,7 @@ namespace connect_4_core
 
         public bool CheckWin(uint col, PlayerID player)
         {
-            return victoryChecker.CheckVictory(this, col, player);
+            return VictoryChecker.CheckVictory(this, col, player);
         }
 
         /// <summary>
