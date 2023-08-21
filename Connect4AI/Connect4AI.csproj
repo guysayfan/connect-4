@@ -10,4 +10,8 @@
     <ProjectReference Include="..\connect-4-core\Connect4Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="the-gigi.minimax-csharp" Version="1.0.1" />
+  </ItemGroup>
+
 </Project>
