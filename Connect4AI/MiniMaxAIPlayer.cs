@@ -44,8 +44,8 @@ namespace connect_4
                     continue;
                 }
 
-                var pieceCount = board.GetPieceCount();
-                var player = pieceCount.Player1 == pieceCount.Player2 ? PlayerID.One : PlayerID.Two;
+                var pieceCount = board.CountPieces();
+                var player = pieceCount % 2 == 0 ? PlayerID.One : PlayerID.Two;
 
                 var b = new Board(board);
                 b.DropPiece(i, player);
@@ -57,19 +57,84 @@ namespace connect_4
 
         public bool Terminal => isTerminal();
             
-
-
         public IEnumerable<MiniMax.INode> Children => getChildren();
 
         public int CalculateScore(MiniMax.Player maximizingPlayer)
         {
-            throw new NotImplementedException();
+            var score = 0;
+            // score 100/-100 for each sure victory
+            var win = VictoryChecker.CheckVictory(board, board.LastPiece, board.LastPlayer);
+            if (win)
+            {
+                if ((int)board.LastPlayer == (int)maximizingPlayer)
+                {
+                    return 100;
+                }
+                else
+                {
+                    return -100;
+                }
+            } 
+            
+            // if the last piece was played in the center column, add 30
+            if (board.LastPiece == 3)
+            {
+                score += 30;
+            }
+
+            // score 10/-10 for each 3-in-a-row with empty slot
+
+            // in each direction (except up)
+            // starting from the last played piece, go 3 steps in a direction if possible
+            // if 3 steps are not possible, continue
+            // if an enemy piece is encountered, continue
+            // if the number of pieces is 3, add 10 points
+
+            // check for center
+            var score = 0;
+            var center = cells[1, 1];
+            if (center == (int)maximizingPlayer)
+            {
+                score += 6;
+            }
+            else if (center != 0) // other player got the center
+            {
+                score -= 6;
+            }
+
+            // check for potential victories
+            var victoryCount = 0;
+            for (int i = 0; i < 3; ++i)
+            {
+                for (int j = 0; j < 3; ++j)
+                {
+                    if (cells[j, i] == 0)
+                    {
+                        var node = new TicTacToe(displayState.ToString());
+                        node.Place(j, i, maximizingPlayer);
+                        if (node.checkVictory() == (int)maximizingPlayer)
+                        {
+                            victoryCount++;
+                            if (victoryCount > 1) // multipl victory positions
+                            {
+                                return 1000;
+                            }
+                        }
+                    }
+                }
+            }
+            if (victoryCount > 0)
+            {
+                score += 2;
+            }
+
+            return score;
         }
     }
 
+    public  CountPieces(Board b9)
 
-
-    public class MiniMaxAIPlayer : IPlayer, 
+    public class MiniMaxAIPlayer : IPlayer
     {
         PlayerID aiPlayer;
         PlayerID human;
@@ -88,14 +153,14 @@ namespace connect_4
             Thread.Sleep(1000);
 
             // Check if AI wins
-            var cols = FindWinningCols(board, aiPlayer);
+            var cols = board.FindWinningCols(aiPlayer);
             if (cols.Count > 0)
             {
                 return cols.First();
             }
 
             // Check if human wins
-            cols = FindWinningCols(board, human);
+            cols = board.FindWinningCols(human);
             if (cols.Count > 0)
             {
                 return cols.First();

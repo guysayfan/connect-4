@@ -30,3 +30,5 @@ Board is considered a winning board at turn N - 2 for player A if player A wins 
 
 [HackMD Design Doc](https://hackmd.io/hGzjvttQQtStH9FA595j3A)
 
+[Keith Galli - Minimax Scoring](https://youtu.be/MMLtza3CZFM?si=xuKBjimIytXdnuW7&t=865)
+

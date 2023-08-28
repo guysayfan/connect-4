@@ -6,6 +6,7 @@ namespace connect_4_core
     public class Board
     {
         const int INVALID_ROW = 999;
+        uint lastPiece;
 
         PlayerID[,] board = new PlayerID[7, 6];
 
@@ -32,9 +33,14 @@ namespace connect_4_core
                 throw new Exception("Col full");
             }
             board[col, topRow] = player;
+            lastPiece = col;
 
             return topRow;
         }
+
+        public uint LastPiece => lastPiece;
+
+        public PlayerID LastPlayer => CountPieces() % 2 == 0 ? PlayerID.One : PlayerID.Two;
 
         public void RemoveTopPiece(uint col)
         {
