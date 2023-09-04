@@ -5,7 +5,7 @@ namespace connect_4_core
 {
     public class Board
     {
-        const int INVALID_ROW = 999;
+        public const int INVALID_ROW = 999;
         uint lastPiece;
 
         PlayerID[,] board = new PlayerID[7, 6];
@@ -61,7 +61,7 @@ namespace connect_4_core
             return board[location.Col, location.Row];
         }
 
-
+        // returns top occupied row
         public uint FindTopRow(uint col)
         {
             if (board[col, 0] != PlayerID.None) {

@@ -22,7 +22,7 @@ namespace connect_4
             this.board = board;
         }
 
-        private bool isTerminal()
+        private bool IsTerminal()
         {
             var boardIsFull = Enumerable.Range(0, 7)
             .Select(i => board.IsColFull((uint)i)).All(x => x);
@@ -33,7 +33,7 @@ namespace connect_4
             return boardIsFull || player1Wins || player2Wins;
         }
 
-        private IEnumerable<MiniMax.INode> getChildren() {
+        private IEnumerable<MiniMax.INode> GetChildren() {
             var children = new HashSet<Node>();
 
             
@@ -55,12 +55,78 @@ namespace connect_4
             return children;
         }
 
-        public bool Terminal => isTerminal();
+        public bool Terminal => IsTerminal();
             
-        public IEnumerable<MiniMax.INode> Children => getChildren();
+        public IEnumerable<MiniMax.INode> Children => GetChildren();
+
+        private uint CountPieces(Board b, int dx, int dy)
+        {
+            uint pieces = 1;
+            var col = b.LastPiece;
+            var row = b.FindTopRow(col);
+            var topRow = row == Board.INVALID_ROW;
+            if (topRow)
+            {
+                row = 0;
+            }
+            for (uint i = 0; i < 3; i++)
+            {
+                if (dx < 0)
+                {
+                    if (col == 0)
+                    {
+                        continue;
+                    }
+                    col--;
+                }
+                else if (dx > 0)
+                {
+                    if (col == 6)
+                    {
+                        continue;
+                    }
+                    col++;
+                }
+                if (dy < 0 && !topRow)
+                {
+                    if (row == 0)
+                    {
+                        continue;
+                    }
+                    row--;
+                }
+                else if (dy > 0)
+                {
+                    if (row == 5)
+                    {
+                        continue;
+                    }
+                    row++;
+                }
+
+                if (b.Get(col, row) == b.LastPlayer) { 
+                    pieces++;
+                } else if (b.Get(col, row) == b.LastPlayer.Other())
+                {
+                    break;
+                }
+            }
+            return pieces;
+        }
 
         public int CalculateScore(MiniMax.Player maximizingPlayer)
         {
+            var dirs = new Tuple<int, int>[]
+            {
+                new Tuple<int, int>( 0, 1 ),   // down
+                new Tuple<int, int>( -1, 0 ),  // left
+                new Tuple<int, int>( 1, 0 ),   // right
+                new Tuple<int, int>( -1, -1 ), // up left
+                new Tuple<int, int>( 1, -1 ),  // up right
+                new Tuple<int, int>( -1, 1 ),  // down left
+                new Tuple<int, int>( 1, 1 ),   // down right
+            };
+
             var score = 0;
             // score 100/-100 for each sure victory
             var win = VictoryChecker.CheckVictory(board, board.LastPiece, board.LastPlayer);
@@ -82,57 +148,24 @@ namespace connect_4
                 score += 30;
             }
 
-            // score 10/-10 for each 3-in-a-row with empty slot
-
-            // in each direction (except up)
+            // score 10/-10 for each 3-in-a-row with empty slot in each direction (except up)
             // starting from the last played piece, go 3 steps in a direction if possible
-            // if 3 steps are not possible, continue
-            // if an enemy piece is encountered, continue
-            // if the number of pieces is 3, add 10 points
-
-            // check for center
-            var score = 0;
-            var center = cells[1, 1];
-            if (center == (int)maximizingPlayer)
+            foreach(var dir in dirs)
             {
-                score += 6;
-            }
-            else if (center != 0) // other player got the center
-            {
-                score -= 6;
-            }
-
-            // check for potential victories
-            var victoryCount = 0;
-            for (int i = 0; i < 3; ++i)
-            {
-                for (int j = 0; j < 3; ++j)
+                var pieces = CountPieces(board, dir.Item1, dir.Item2);
+                if (pieces > 2 )
                 {
-                    if (cells[j, i] == 0)
-                    {
-                        var node = new TicTacToe(displayState.ToString());
-                        node.Place(j, i, maximizingPlayer);
-                        if (node.checkVictory() == (int)maximizingPlayer)
-                        {
-                            victoryCount++;
-                            if (victoryCount > 1) // multipl victory positions
-                            {
-                                return 1000;
-                            }
-                        }
-                    }
+                    score += 10;
+                }
+                else if (pieces > 1)
+                {
+                    score += 5;
                 }
             }
-            if (victoryCount > 0)
-            {
-                score += 2;
-            }
 
-            return score;
+            return ((int)board.LastPlayer == (int)maximizingPlayer) ? score : -score; 
         }
     }
-
-    public  CountPieces(Board b9)
 
     public class MiniMaxAIPlayer : IPlayer
     {
@@ -166,8 +199,28 @@ namespace connect_4
                 return cols.First();
             }
 
+            var highestScore = 0;
+            uint bestCol = 0;
             // Use MiniMax algorithm to find best next move
-            return 0;
+            for (uint i = 0; i < 7; i++)
+            {
+                var b = new Board(board);
+                if (b.IsColFull(i))
+                {
+                    continue;
+                }
+                var curPlayer = b.LastPlayer.Other();
+                b.DropPiece(i, curPlayer);
+                var n = new Node(b);
+                var score = n.CalculateScore((MiniMax.Player)curPlayer);
+                if (score > highestScore)
+                {
+                    highestScore = score;
+                    bestCol = i;
+                }
+            }
+
+            return bestCol;
         }
 
 
