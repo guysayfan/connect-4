@@ -19,14 +19,19 @@ namespace connect_4_core
         private static bool CheckVerticalWin(Board board, uint col, PlayerID player)
         {
             var row = board.FindTopRow(col) + 1;
+            if (row == Board.INVALID_ROW + 1)
+            {
+                row = 0;
+            }
             if (row > 2)
             {
                 return false;
             }
 
-            for (uint i = row; i < row + 3; i++)
+            for (uint i = row; i < row + 4; i++)
             {
-                if (board.GetPlayer(new Location(col, i)) != player) {
+                var p = board.Get(col, i);
+                if (p != player) {
                     return false;
                 }
             }

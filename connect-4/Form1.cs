@@ -7,6 +7,7 @@ namespace connect_4
     public partial class Connect4 : Form, IGameEngineEvents, IPlayer
     {
         const int INVALID_COL = 999;
+        const int LOOK_AHEAD = 3;
 
         const int penWidth = 4;
         const int offset = 30;
@@ -39,7 +40,7 @@ namespace connect_4
             var height = 2 * (penWidth + 2 * offset) + 6 * cellSize;
             ClientSize = new Size(width, height);
 
-            Task.Run(() => engine.Run(this, new MiniMaxAIPlayer(PlayerID.Two, 1), this));
+            Task.Run(() => engine.Run(this, new MiniMaxAIPlayer(PlayerID.Two, LOOK_AHEAD), this));
         }
 
         private void connect4_Paint(object sender, PaintEventArgs e)
