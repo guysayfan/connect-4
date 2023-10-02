@@ -8,7 +8,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace connect_4
+namespace Connect4AI
 {
     enum BoardScore : uint
     {

@@ -1,34 +1,23 @@
 ﻿using connect_4_core;
-using Connect4AI;
+using MiniMax;
 using System.Diagnostics;
+using System.Text;
 
-
-namespace connect_4
+namespace Connect4AI
 {
-    enum BaseColScore : uint
+    public class Node : Board, MiniMax.INode
     {
-        Victory = 10000,
-        Center = 6,          // piece center column 
-        ThreeOutfOfFour = 4, // 3 pieces and 1 empty
-        TwoOutOfFour = 2     // 2 pieces and 2 empty
-    }
-
-    public class Node : MiniMax.INode
-    {
-        Board board;
-
-        public Node(Board board)
+        public Node(Board board) : base(board)
         {
-            this.board = board;
         }
 
         private bool IsTerminal()
         {
             var boardIsFull = Enumerable.Range(0, 7)
-            .Select(i => board.IsColFull((uint)i)).All(x => x);
+            .Select(i => IsColFull((uint)i)).All(x => x);
 
-            var player1Wins = board.FindWinningCols(PlayerID.One).Count > 0;
-            var player2Wins = board.FindWinningCols(PlayerID.Two).Count > 0;
+            var player1Wins = this.FindWinningCols(PlayerID.One).Count > 0;
+            var player2Wins = this.FindWinningCols(PlayerID.Two).Count > 0;
 
             return boardIsFull || player1Wins || player2Wins;
         }
@@ -39,15 +28,15 @@ namespace connect_4
             
             for (uint i = 0; i < 7; i++)
             {
-                if (board.IsColFull(i))
+                if (IsColFull(i))
                 {
                     continue;
                 }
 
-                var pieceCount = board.CountPieces();
+                var pieceCount = CountPieces();
                 var player = pieceCount % 2 == 0 ? PlayerID.One : PlayerID.Two;
 
-                var b = new Board(board);
+                var b = new Board(this);
                 b.DropPiece(i, player);
                 children.Add(new Node(b));
             }
@@ -59,7 +48,73 @@ namespace connect_4
             
         public IEnumerable<MiniMax.INode> Children => GetChildren();
 
-        private uint CountPieces(Board b, int dx, int dy)
+        private int CalculatePlayerScore(Board b, int x, int y, int dx, int dy, PlayerID player)
+        {
+            var score = 0;
+
+            // At most 4 windows
+            for (uint i = 0; i < 4; i++)
+            {
+                var col = (int)(x + i * dx);
+                var row = (int)(y + i * dy);
+
+                if ((row > 2 && dy == 1) || (row < 3 && dy == -1))
+                {
+                    continue;
+                }
+            
+                var pieces = CountPiecesFromPoint(b, col, row, dx, dy, player);
+                switch (pieces)
+                {
+                    case 2:
+                        score += 5;
+                        break;
+                    case 3: 
+                        score += 10;
+                        break;
+                    case 4:
+                        score += 100;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return score;
+        }
+
+        private uint CountPiecesFromPoint(Board b, int col, int row, int dx, int dy, PlayerID player)
+        {
+            uint pieces = 0;
+            for (uint i = 0; i < 4; i++)
+            {
+                var px = col + i * dx;
+                var py = row + i * dy;
+
+                var p = PlayerID.None;
+                try
+                {
+                    p = b.Get((uint)px, (uint)py);
+                }
+                catch 
+                {
+                    p = b.Get((uint)px, (uint)py);
+                }
+                
+                if (p == player)
+                {
+                    pieces++;
+                }
+                else if (p == player.Other())
+                {
+                    return 0; // there is a piece of the other player in the window
+                }
+            }
+            return pieces;
+        }
+
+    
+
+    private uint CountPieces(Board b, int dx, int dy)
         {
             uint pieces = 1;
             var col = b.LastPiece;
@@ -116,6 +171,48 @@ namespace connect_4
 
         public int CalculateScore(MiniMax.Player maximizingPlayer)
         {
+            var score = 0;
+            var player = (PlayerID)maximizingPlayer;
+            // claculate row scores
+            for (var row = 0; row < 6; row++)
+            {
+                score += CalculatePlayerScore(this, 0, row, 1, 0, player);
+            }
+
+            // calculate col scores
+            for (var col = 0; col < 7; col++)
+            {
+                score += CalculatePlayerScore(this, col, 0, 0, 1, player);
+            }
+
+            // calculate diag scores
+            foreach (var col in Enumerable.Range(0, 3))
+            {
+                // descending diag (starting from top row)
+                score += CalculatePlayerScore(this, col, 0, 1, 1, player);
+                // ascending diag (starting from bottom row)
+                score += CalculatePlayerScore(this, col, 6, -1, 1, player);
+            }
+            foreach (var row in Enumerable.Range(1, 4))
+            {
+                if (row < 3)
+                {
+                    // descending diag (starting from leftmost col)
+                    score += CalculatePlayerScore(this, 0, row, 1, 1, player);
+                }
+                else
+                {
+                    // ascending diag (starting from leftmost col)
+                    score += CalculatePlayerScore(this, 0, row, -1, 1, player);
+                }
+            }
+
+            return score;
+        }
+
+
+        public int CalculateScore2(MiniMax.Player maximizingPlayer)
+        {
             var dirs = new Tuple<int, int>[]
             {
                 new Tuple<int, int>( 0, 1 ),   // down
@@ -129,10 +226,10 @@ namespace connect_4
 
             var score = 0;
             // score 100/-100 for each sure victory
-            var win = VictoryChecker.CheckVictory(board, board.LastPiece, board.LastPlayer);
+            var win = VictoryChecker.CheckVictory(this, LastPiece, LastPlayer);
             if (win)
             {
-                if ((int)board.LastPlayer == (int)maximizingPlayer)
+                if ((int)LastPlayer == (int)maximizingPlayer)
                 {
                     return 100;
                 }
@@ -143,7 +240,7 @@ namespace connect_4
             } 
             
             // if the last piece was played in the center column, add 30
-            if (board.LastPiece == 3)
+            if (LastPiece == 3)
             {
                 score += 30;
             }
@@ -152,7 +249,7 @@ namespace connect_4
             // starting from the last played piece, go 3 steps in a direction if possible
             foreach(var dir in dirs)
             {
-                var pieces = CountPieces(board, dir.Item1, dir.Item2);
+                var pieces = CountPieces(this, dir.Item1, dir.Item2);
                 if (pieces > 2 )
                 {
                     score += 10;
@@ -163,7 +260,68 @@ namespace connect_4
                 }
             }
 
-            return ((int)board.LastPlayer == (int)maximizingPlayer) ? score : -score; 
+            return ((int)LastPlayer == (int)maximizingPlayer) ? score : -score; 
+        }
+    }
+
+
+    public record ScoredBoard(Board Board, int Lookahead, int Score);
+
+
+    public class MiniMaxDebugger : IMiniMaxEvents
+    {
+        int lookahead;
+        public MiniMaxDebugger(int lookahead) 
+        { 
+            this.lookahead = lookahead;
+        }
+        Dictionary<int, List<ScoredBoard>> scoredBoards = new Dictionary<int, List<ScoredBoard>>();
+        public void OnNodeScore(INode n, int score, int index)
+        {
+            var b = (Board)n;
+            var scoredBoard = new ScoredBoard(b, index, score);
+            // make index ascending from zero
+            index = lookahead - index;
+            if (!scoredBoards.ContainsKey(index)) {
+                scoredBoards[index] = new List<ScoredBoard>();
+            }
+            scoredBoards[index].Add(scoredBoard);
+        }
+
+        private void dumpBoard(StreamWriter s, ScoredBoard b)
+        {
+            var x = "\u25CF"; // black circle
+            var o = "\u25CB"; // white circle
+
+            //x = "\u1F534"; // red
+            //o = "\u1F7E1"; // yellow
+
+            var p = b.Board.LastPlayer == PlayerID.One ? x : o;
+
+            var header = $"score: {b.Score}, player: {p}, lookahead: {lookahead - b.Lookahead}";
+            s.WriteLine(header);
+            var data = b.Board.ToString();
+            data = data.Replace("x", x); // black circle
+            data = data.Replace("o", o); // white circle
+            
+            s.WriteLine(data);
+        }
+        public void Dump(string filename)
+        {
+            FileStream stream = new FileStream(filename, FileMode.Create);
+            using (StreamWriter s = new StreamWriter(stream, Encoding.UTF8))
+            {
+                for (var i = 0; i < scoredBoards.Count; i++)
+                {
+                    s.WriteLine($"=== lookahead {i} ===");
+                    var a = scoredBoards[i];
+                    for (var j = 0; j < a.Count; j++)
+                    {
+                        var b = a[j];
+                        dumpBoard(s, b);
+                    }
+                }
+            }            
         }
     }
 
@@ -172,6 +330,9 @@ namespace connect_4
         PlayerID aiPlayer;
         PlayerID human;
         uint lookAhead;
+        
+
+
         public MiniMaxAIPlayer(PlayerID player, uint lookAhead)
         {
             aiPlayer = player;
@@ -183,46 +344,56 @@ namespace connect_4
 
         public uint Play(Board board)
         {
-            Thread.Sleep(1000);
-
-            // Check if AI wins
-            var cols = board.FindWinningCols(aiPlayer);
-            if (cols.Count > 0)
+            var debugger = new MiniMaxDebugger((int)lookAhead);
+            try
             {
-                return cols.First();
-            }
+                // Store all the boards that were scoreed during this play                
+                Thread.Sleep(1000);
 
-            // Check if human wins
-            cols = board.FindWinningCols(human);
-            if (cols.Count > 0)
-            {
-                return cols.First();
-            }
-
-            var highestScore = 0;
-            uint bestCol = 0;
-            // Use MiniMax algorithm to find best next move
-            for (uint i = 0; i < 7; i++)
-            {
-                var b = new Board(board);
-                if (b.IsColFull(i))
+                // Check if AI wins
+                var cols = board.FindWinningCols(aiPlayer);
+                if (cols.Count > 0)
                 {
-                    continue;
+                    return cols.First();
                 }
-                var curPlayer = b.LastPlayer.Other();
-                b.DropPiece(i, curPlayer);
-                var n = new Node(b);
-                var score = n.CalculateScore((MiniMax.Player)curPlayer);
-                if (score > highestScore)
-                {
-                    highestScore = score;
-                    bestCol = i;
-                }
-            }
 
-            return bestCol;
+                // Check if human wins
+                cols = board.FindWinningCols(human);
+                if (cols.Count > 0)
+                {
+                    return cols.First();
+                }
+
+
+                var highestScore = 0;
+                uint bestCol = 0;
+
+                // Use MiniMax algorithm to find best next move
+                for (uint i = 0; i < 7; i++)
+                {
+                    var b = new Board(board);
+                    if (b.IsColFull(i))
+                    {
+                        continue;
+                    }
+                    var curPlayer = b.LastPlayer.Other();
+                    b.DropPiece(i, curPlayer);
+                    var n = new Node(b);
+                    var score = MiniAax.MiniMax(n, (int)lookAhead, -1000, 1000, (MiniMax.Player)curPlayer, debugger);
+                    if (score > highestScore)
+                    {
+                        highestScore = score;
+                        bestCol = i;
+                    }
+                }                
+                return bestCol;
+            }
+            finally
+            {
+                var filename = "minimax-debugger.txt";
+                debugger.Dump(filename);
+            }
         }
-
 
     }
 }

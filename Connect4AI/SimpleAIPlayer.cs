@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using connect_4_core;
 
-namespace connect_4
+namespace Connect4AI
 {
     public class SimpleAIPlayer : IPlayer
     {

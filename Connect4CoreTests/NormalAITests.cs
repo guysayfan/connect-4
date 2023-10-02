@@ -1,6 +1,5 @@
-﻿using connect_4;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Connect4AI;
 
 namespace connect_4_core.Tests
 {

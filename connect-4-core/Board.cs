@@ -6,14 +6,16 @@ namespace connect_4_core
     public class Board
     {
         public const int INVALID_ROW = 999;
-        uint lastPiece;
-
         PlayerID[,] board = new PlayerID[7, 6];
 
         public Board()
         {
         }
 
+        public uint LastPiece
+        {
+            get; set;
+        }
         public Board(Board b)
         {
             for (uint col = 0; col < 7; col++)
@@ -33,14 +35,12 @@ namespace connect_4_core
                 throw new Exception("Col full");
             }
             board[col, topRow] = player;
-            lastPiece = col;
+            LastPiece = col;
 
             return topRow;
         }
 
-        public uint LastPiece => lastPiece;
-
-        public PlayerID LastPlayer => CountPieces() % 2 == 0 ? PlayerID.One : PlayerID.Two;
+        public PlayerID LastPlayer => CountPieces() % 2 == 0 ? PlayerID.Two : PlayerID.One;
 
         public void RemoveTopPiece(uint col)
         {
@@ -152,18 +152,12 @@ namespace connect_4_core
                 for (uint col = 0; col < 7; col++)
                 {
                     var player = Get(col, row);
-                    switch (player)
+                    c = player switch
                     {
-                        case PlayerID.One:
-                            c = 'x';
-                            break;
-                        case PlayerID.Two:
-                            c = 'o';
-                            break;
-                        default:
-                            c = '.';
-                            break;
-                    }
+                        PlayerID.One => 'x',
+                        PlayerID.Two => 'o',
+                        _ => '.',
+                    };
                     ln.Append(c);
                 }
                 Console.WriteLine(ln.ToString());

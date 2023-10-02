@@ -1,13 +1,12 @@
 using connect_4_core;
-using System.Drawing;
-using System.Runtime.CompilerServices;
+using Connect4AI;
 
 namespace connect_4
 {
     public partial class Connect4 : Form, IGameEngineEvents, IPlayer
     {
         const int INVALID_COL = 999;
-        const int LOOK_AHEAD = 3;
+        const int LOOK_AHEAD = 4; // must be even!
 
         const int penWidth = 4;
         const int offset = 30;
@@ -39,6 +38,11 @@ namespace connect_4
             var width = 2 * (penWidth + 2 * offset) + 7 * cellSize;
             var height = 2 * (penWidth + 2 * offset) + 6 * cellSize;
             ClientSize = new Size(width, height);
+
+            if (LOOK_AHEAD % 2 != 0 && LOOK_AHEAD >= 4)
+            {
+                throw new Exception("Lookahead must be even and at least 4");
+            }
 
             Task.Run(() => engine.Run(this, new MiniMaxAIPlayer(PlayerID.Two, LOOK_AHEAD), this));
         }

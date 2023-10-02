@@ -52,6 +52,8 @@ namespace connect_4_core.Tests
             b.Set(2, 1, PlayerID.One);
             b.Set(2, 2, PlayerID.One);
             b.Set(2, 3, PlayerID.One);
+            b.Set(2, 4, PlayerID.One);
+
 
             var result = VictoryChecker.CheckVictory(b, 2, PlayerID.One);
             Assert.IsTrue(result);

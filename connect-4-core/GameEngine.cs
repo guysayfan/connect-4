@@ -22,7 +22,8 @@ namespace connect_4_core
         {
             board = new Board();
             rnd = new Random();
-            activePlayer = rnd.Next(2) == 0 ? PlayerID.One : PlayerID.Two;
+            //activePlayer = rnd.Next(2) == 0 ? PlayerID.One : PlayerID.Two;
+            activePlayer = PlayerID.Two;
         }
         public PlayerID GetActivePlayer()
         {

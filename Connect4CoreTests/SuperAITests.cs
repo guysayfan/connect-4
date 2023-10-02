@@ -1,7 +1,6 @@
-﻿using connect_4;
-using Connect4AI;
+﻿using Connect4AI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using System.Diagnostics;
 
 namespace connect_4_core.Tests
 {
@@ -74,21 +73,67 @@ namespace connect_4_core.Tests
             Assert.AreEqual(result, (uint)6);
         }
 
+
+
         [TestMethod()]
-        public void BlockLookAheadTwo_Test()
+        public void BlockLookAheadOne_Test()
         {
-            n = new SuperAIPlayer(PlayerID.Two, 2);
+            n = new SuperAIPlayer(PlayerID.Two, 1);
             var b = $@"
             .......
             .......
-            ....o..
+            ...xo..
             ...ox..
             ...xxx.
             o..oox.";
             var bb = bg.BuildBoard(b);
 
             var result = n.Play(bb);
-            Assert.AreEqual(result, (uint)3);
+            Assert.AreEqual((uint)3, result);
+        }
+
+
+
+        [TestMethod()]
+        public void BlockLookAheadThree_Test()
+        {
+            // supposed to place in col 3. otherwise player 1 wins in 2 turns;
+            n = new SuperAIPlayer(PlayerID.Two, 3);
+            var b = $@"
+            .......
+            .......
+            .......
+            .....xx
+            ....oxo
+            ...oxox";
+            var bb = bg.BuildBoard(b);
+
+            var red = "\u1F534";
+            var yellow = "\u1F7E1";
+            Debug.WriteLine(red + yellow);
+
+            var result = n.Play(bb);
+            var expected = new uint[] { 3, 6 };
+            Assert.IsTrue(expected.Contains(result));
+        }
+
+        [TestMethod()]
+        public void ChooseLookAheadThree_Test()
+        {
+            // supposed to place in col 3 and win for sure in the next turn
+            n = new SuperAIPlayer(PlayerID.One, 3);
+            var b = $@"
+            .......
+            .......
+            .......
+            .....xx
+            ...ooxo
+            ...oxox";
+
+            var bb = bg.BuildBoard(b);
+
+            var result = n.Play(bb);
+            Assert.AreEqual((uint)3, result);
         }
 
         [TestMethod()]
