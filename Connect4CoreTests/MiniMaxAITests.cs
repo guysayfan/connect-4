@@ -8,9 +8,9 @@ namespace connect_4_core.Tests
     [TestClass()]
     public class MiniMaxAITests
     {
-        Board b = new Board();
-        BoardGenerator bg = new BoardGenerator();
-        MiniMaxAIPlayer n = new MiniMaxAIPlayer(PlayerID.Two, 2);
+        Board b = new();
+        readonly BoardGenerator bg = new();
+        MiniMaxAIPlayer n = new(PlayerID.Two, 2);
 
         [TestInitialize()]
         public void TestInitialize()
@@ -108,10 +108,6 @@ namespace connect_4_core.Tests
             var bb = bg.BuildBoard(b);
             bb.LastPiece = 3;
 
-            var red = "\u1F534";
-            var yellow = "\u1F7E1";
-            Debug.WriteLine(red + yellow);
-
             var result = n.Play(bb);
             Assert.AreEqual((uint)3, result);
         }
@@ -136,27 +132,74 @@ namespace connect_4_core.Tests
             Assert.AreEqual((uint)2, result);
         }
 
+        [TestMethod()]
+        public void WinLookAheadTwo_Test()
+        {
+            // player 1 is supposed to place in col 2 or 4 to win for sure in the nexst turn 
+            n = new MiniMaxAIPlayer(PlayerID.One, 2);
+            var b = $@"
+            .......
+            .......
+            .......
+            ...o...
+            ...o...
+            ...xx..";
+
+            var bb = bg.BuildBoard(b);
+            bb.LastPiece = 3;
+
+            var result = n.Play(bb);
+            Assert.AreEqual((uint)2, result);
+        }
 
         [TestMethod()]
-        public void Node_Test()
+        public void BlockLookAheadFour_Test()
         {
-            // sure victory
+            // supposed to place in col 2 or 4 to block sure victory of player 1 
+            n = new MiniMaxAIPlayer(PlayerID.Two, 4);
             var b = $@"
             .......
             .......
             .......
             .......
-            ......o
-            oxxxx.o";
+            ...o...
+            ...xx..";
+
             var bb = bg.BuildBoard(b);
-            bb.LastPiece = 1;
+            bb.LastPiece = 4;
+
+            var result = n.Play(bb);
+            Assert.AreEqual((uint)2, result);
+        }
+
+
+        [TestMethod()]
+        public void Node_Test()
+        {
+            // sure victory
+            //var b = $@"
+            //.......
+            //.......
+            //.......
+            //.......
+            //......o
+            //oxxxx.o";
+            var b = $@"
+            .......
+            .......
+            .......
+            .......
+            ...o...
+            .oxxxxo";
+            var bb = bg.BuildBoard(b);
+            bb.LastPiece = 2;
             
             var n = new Node(bb);
             var score = n.CalculateScore(Player.One);
-            Assert.AreEqual(100, score);
+            Assert.AreEqual(1000, score);
 
             score = n.CalculateScore(Player.Two);
-            Assert.AreEqual(-100, score);
+            Assert.AreEqual(-1000, score);
         }
     }
 }

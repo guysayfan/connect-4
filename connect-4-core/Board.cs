@@ -18,6 +18,7 @@ namespace connect_4_core
         }
         public Board(Board b)
         {
+            LastPiece = b.LastPiece;
             for (uint col = 0; col < 7; col++)
             {
                 for (int row = 0; row < 6; row++) 

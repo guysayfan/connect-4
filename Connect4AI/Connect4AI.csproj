@@ -7,10 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="the-gigi.minimax-csharp" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\minimax-csharp\MiniMax\MiniMax.csproj" />
     <ProjectReference Include="..\connect-4-core\Connect4Core.csproj" />
   </ItemGroup>
 
