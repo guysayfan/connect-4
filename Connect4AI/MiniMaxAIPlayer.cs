@@ -2,6 +2,7 @@
 using MiniMax;
 using System.Diagnostics;
 using System.Text;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Connect4AI
 {
@@ -49,6 +50,8 @@ namespace Connect4AI
         public bool Terminal => IsTerminal();
 
         public IEnumerable<MiniMax.INode> Children => GetChildren();
+
+        
 
         private int CalculatePlayerScore(Board b, int x, int y, int dx, int dy, PlayerID player)
         {
@@ -119,81 +122,11 @@ namespace Connect4AI
             return pieces;
         }
 
-        private uint CountPieces(Board b, int dx, int dy)
-        {
-            uint pieces = 1;
-            var col = b.LastPiece;
-            var row = b.FindTopRow(col);
-            var topRow = row == Board.INVALID_ROW;
-            if (topRow)
-            {
-                row = 0;
-            }
-            for (uint i = 0; i < 3; i++)
-            {
-                if (dx < 0)
-                {
-                    if (col == 0)
-                    {
-                        continue;
-                    }
-                    col--;
-                }
-                else if (dx > 0)
-                {
-                    if (col == 6)
-                    {
-                        continue;
-                    }
-                    col++;
-                }
-                if (dy < 0 && !topRow)
-                {
-                    if (row == 0)
-                    {
-                        continue;
-                    }
-                    row--;
-                }
-                else if (dy > 0)
-                {
-                    if (row == 5)
-                    {
-                        continue;
-                    }
-                    row++;
-                }
 
-                if (b.Get(col, row) == b.LastPlayer)
-                {
-                    pieces++;
-                }
-                else if (b.Get(col, row) == b.LastPlayer.Other())
-                {
-                    break;
-                }
-            }
-            return pieces;
-        }
 
-        public int CalculateScore(MiniMax.Player maximizingPlayer)
+        private int CalculateTotalPlayerScore(Board b, PlayerID player)
         {
             var score = 0;
-            // score 1000/-1000 for each sure victory
-            var win = VictoryChecker.CheckVictory(this, LastPiece, LastPlayer);
-            if (win)
-            {
-                if ((int)LastPlayer == (int)maximizingPlayer)
-                {
-                    return 1000;
-                }
-                else
-                {
-                    return -1000;
-                }
-            }
-
-            var player = (PlayerID)maximizingPlayer;
             // calculate row scores
             for (var row = 0; row < 6; row++)
             {
@@ -238,6 +171,20 @@ namespace Connect4AI
             }
 
             return score;
+        }
+
+        public int CalculateScore(MiniMax.Player maximizingPlayer)
+        {
+            var player = (PlayerID)maximizingPlayer;
+            var otherPlayer = player.Other();
+
+            var otherScore = CalculateTotalPlayerScore(this, otherPlayer);
+            if (otherScore >= 1000)
+            {
+                return -1000;
+            }
+
+            return CalculateTotalPlayerScore(this, player);
         }
     }
 
